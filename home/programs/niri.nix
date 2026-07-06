@@ -26,7 +26,7 @@
       };
 
       # === ВВОД ===
-      gestures = { hot-corners = { off = true; }; };
+      gestures = { hot-corners = { enable = false; }; };
       
       input = {
         keyboard = {
