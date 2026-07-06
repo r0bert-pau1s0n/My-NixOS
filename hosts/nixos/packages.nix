@@ -15,7 +15,6 @@
     
     # Сеть и Bluetooth
     bluez
-    bluez-utils
     openssh
     
     # Wayland компоненты
