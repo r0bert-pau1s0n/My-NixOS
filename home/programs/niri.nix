@@ -92,7 +92,7 @@
       };
 
       # === ГОРЯЧИЕ КЛАВИШИ (BINDES) ===
-      keybindings = {
+      binds = {
         # Система
         "Mod+Shift+Slash" = { show-hotkey-overlay = {}; };
         "Super+Alt+L" = { spawn = "swaylock"; hotkey-overlay-title = "Lock the Screen: swaylock"; };
