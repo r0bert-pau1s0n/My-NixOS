@@ -4,6 +4,6 @@
   imports = [
     ./programs/niri.nix
     ./programs/kitty.nix
-    ./programs/noctaliashell.nix
+    ./programs/noctalia.nix
   ];
 }
