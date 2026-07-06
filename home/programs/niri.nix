@@ -9,12 +9,12 @@
       # === НАЧАЛЬНЫЙ ЗАПУСК ===
       spawn-at-startup = [
         "xwayland-satellite"
-        [ "sh" "-c" "sleep 2 && export DISPLAY=:0" ]
+        "sh" "-c" "sleep 2 && export DISPLAY=:0" 
         "noctalia-shell"
         "v2rayN"
-        [ "sh" "-c" "sleep 2 && Telegram" ]
+         "sh" "-c" "sleep 2 && Telegram" 
         "librewolf"
-        [ "sh" "-c" "sleep 2 && kitty --app-id nvim -e nvim" ]
+         "sh" "-c" "sleep 2 && kitty --app-id nvim -e nvim" 
       ];
 
       # === АНИМАЦИИ ===
