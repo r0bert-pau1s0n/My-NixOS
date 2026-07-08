@@ -1,28 +1,28 @@
 # ~/nix/home/programs/niri.nix
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   programs.niri = {
     enable = true;
-    
+
     settings = {
       # === НАЧАЛЬНЫЙ ЗАПУСК ===
       spawn-at-startup = [
-        [ "xwayland-satellite" ]
-        [ "sh" "-c" "sleep 2 && export DISPLAY=:0" ]
-        [ "noctalia-shell" ]
-        [ "v2rayN" ]
-        [ "sh" "-c" "sleep 2 && Telegram" ]
-        [ "librewolf" ]
-        [ "sh" "-c" "sleep 2 && kitty --app-id nvim -e nvim" ]
+        { command = [ "xwayland-satellite" ]; }
+        { command = [ "sh" "-c" "sleep 2 && export DISPLAY=:0" ]; }
+        { command = [ "noctalia-shell" ]; }
+        { command = [ "v2rayN" ]; }
+        { command = [ "sh" "-c" "sleep 2 && Telegram" ]; }
+        { command = [ "librewolf" ]; }
+        { command = [ "sh" "-c" "sleep 2 && kitty --app-id nvim -e nvim" ]; }
       ];
 
-      # === АНИМАЦИИ ===
+      # === АНИМАЦИИ (Обновлено: добавлено kind) ===
       animations = {
-        window-open = { spring = { damping-ratio = 1.0; stiffness = 600; epsilon = 0.001; }; };
-        window-close = { spring = { damping-ratio = 1.0; stiffness = 500; epsilon = 0.001; }; };
-        workspace-switch = { spring = { damping-ratio = 0.8; stiffness = 1000; epsilon = 0.001; }; };
-        horizontal-view-movement = { spring = { damping-ratio = 0.8; stiffness = 1000; epsilon = 0.0001; }; };
+        window-open = { kind.spring = { damping-ratio = 1.0; stiffness = 600; epsilon = 0.001; }; };
+        window-close = { kind.spring = { damping-ratio = 1.0; stiffness = 500; epsilon = 0.001; }; };
+        workspace-switch = { kind.spring = { damping-ratio = 0.8; stiffness = 1000; epsilon = 0.001; }; };
+        horizontal-view-movement = { kind.spring = { damping-ratio = 0.8; stiffness = 1000; epsilon = 0.0001; }; };
       };
 
       # === ВВОД ===
@@ -67,10 +67,15 @@
         
         default-column-width = { proportion = 0.5; };
         
+        # Обновлено: active.gradient и inactive.color
         focus-ring = {
           width = 2;
-          active-gradient = { from = "#89b4fa"; to = "#cba6f7"; angle = 135; };
-          inactive-color = "#313244";
+          inactive.color = "#1f1f28";
+          active.gradient = {
+            from = "#76946a";
+            to = "#cba6f7";
+            angle = 135;
+          };
         };
         
         border = { enable = false; };
@@ -80,8 +85,8 @@
           draw-behind-window = true;
           softness = 20;
           spread = 2;
+          color = "#1f1f2870";
           offset = { x = 0; y = 3; };
-          color = "#0005";
         };
       };
 
@@ -91,31 +96,31 @@
         "two" = {};
       };
 
-      # === ГОРЯЧИЕ КЛАВИШИ (BINDES) ===
+ # === ГОРЯЧИЕ КЛАВИШИ (BINDS) ===
       binds = {
         # Система
-        "Mod+Shift+Slash" = { action.hshow-hotkey-overlay = {}; };
-        "Super+Alt+L" = { action.spawn = "swaylock"; hotkey-overlay-title = "Lock the Screen: swaylock"; };
+        "Mod+Shift+Slash" = { action.show-hotkey-overlay = {}; };
+        "Super+Alt+L" = { action.spawn = "swaylock"; hotkey-overlay.title = "Lock the Screen: swaylock"; };
         "Mod+Shift+P" = { action.power-off-monitors = {}; };
         "Mod+M" = { action.quit = {}; };
         "Ctrl+Alt+Delete" = { action.quit = {}; };
         "Mod+Escape" = { action.toggle-keyboard-shortcuts-inhibit = {}; allow-inhibiting = false; };
 
         # Запуск приложений
-        "Mod+Return" = { action.spawn = "kitty"; hotkey-overlay-title = "Terminal: kitty"; };
-        "Mod+T" = { action.spawn = "Telegram"; hotkey-overlay-title = "Telegram"; };
-        "Mod+B" = { action.spawn = "librewolf"; hotkey-overlay-title = "LibreWolf"; };
-        "Mod+N" = { action.spawn = [ "kitty" "--app-id" "nvim" "-e" "nvim" ]; hotkey-overlay-title = "Neovim"; };
-        "Mod+X" = { action.spawn = "v2rayN"; hotkey-overlay-title = "V2RayN"; };
-        "Mod+D" = { action.spawn = "code"; hotkey-overlay-title = "VS Code"; };
-        "Mod+E" = { action.spawn = [ "kitty" "--app-id" "yazi" "-e" "yazi" ]; hotkey-overlay-title = "File Manager: Yazi"; };
+        "Mod+Return" = { action.spawn = "kitty"; hotkey-overlay.title = "Terminal: kitty"; };
+        "Mod+T" = { action.spawn = "Telegram"; hotkey-overlay.title = "Telegram"; };
+        "Mod+B" = { action.spawn = "librewolf"; hotkey-overlay.title = "LibreWolf"; };
+        "Mod+N" = { action.spawn = [ "kitty" "--app-id" "nvim" "-e" "nvim" ]; hotkey-overlay.title = "Neovim"; };
+        "Mod+X" = { action.spawn = "v2rayN"; hotkey-overlay.title = "V2RayN"; };
+        "Mod+D" = { action.spawn = "code"; hotkey-overlay.title = "VS Code"; };
+        "Mod+E" = { action.spawn = [ "kitty" "--app-id" "yazi" "-e" "yazi" ]; hotkey-overlay.title = "File Manager: Yazi"; };
 
         # Утилиты Noctalia
-        "Mod+Y" = { action.spawn = [ "noctalia-shell" "ipc" "call" "controlCenter" "toggle" ]; hotkey-overlay-title = "Control Center: noctalia controlCenter"; };
-        "Mod+R" = { action.spawn = [ "noctalia-shell" "ipc" "call" "launcher" "toggle" ]; hotkey-overlay-title = "Application Launcher: Noctalia"; };
-        "Mod+V" = { action.spawn = [ "noctalia-shell" "ipc" "call" "plugin:clipboard" "toggle" ]; hotkey-overlay-title = "Clipboard History: Noctalia"; };
-        "Mod+Shift+V" = { action.spawn = [ "noctalia-shell" "ipc" "call" "plugin:clipboard" "wipe" ]; hotkey-overlay-title = "Clipboard Wipe: Noctalia"; };
-        "Mod+Shift+Q" = { action.spawn = [ "noctalia-shell" "ipc" "call" "sessionMenu" "toggle" ]; hotkey-overlay-title = "Session Menu: noctalia sessionMenu"; };
+        "Mod+Y" = { action.spawn = [ "noctalia-shell" "ipc" "call" "controlCenter" "toggle" ]; hotkey-overlay.title = "Control Center: noctalia controlCenter"; };
+        "Mod+R" = { action.spawn = [ "noctalia-shell" "ipc" "call" "launcher" "toggle" ]; hotkey-overlay.title = "Application Launcher: Noctalia"; };
+        "Mod+V" = { action.spawn = [ "noctalia-shell" "ipc" "call" "plugin:clipboard" "toggle" ]; hotkey-overlay.title = "Clipboard History: Noctalia"; };
+        "Mod+Shift+V" = { action.spawn = [ "noctalia-shell" "ipc" "call" "plugin:clipboard" "wipe" ]; hotkey-overlay.title = "Clipboard Wipe: Noctalia"; };
+        "Mod+Shift+Q" = { action.spawn = [ "noctalia-shell" "ipc" "call" "sessionMenu" "toggle" ]; hotkey-overlay.title = "Session Menu: noctalia sessionMenu"; };
 
         # Фокус
         "Mod+H" = { action.focus-column-left = {}; };
@@ -197,7 +202,7 @@
         "Mod+F" = { action.maximize-column = {}; };
         "Mod+Shift+F" = { action.fullscreen-window = {}; };
         "Mod+Alt+F" = { action.toggle-window-floating = {}; };
-        "Mod+Shift+M" = { action.maximize-window-to-edges = {}; };
+        "Mod+Shift+M" = { action.maximize-column = {}; };
         "Mod+Ctrl+F" = { action.expand-column-to-available-width = {}; };
         "Mod+C" = { action.center-column = {}; };
         "Mod+Ctrl+C" = { action.center-visible-columns = {}; };
@@ -227,12 +232,16 @@
         "Mod+Print" = { action.spawn-sh = "grim - | wl-copy"; };
         "Ctrl+Print" = { action.spawn-sh = "grim -g \"$(slurp)\" - | satty --filename - --fullscreen --floating-hack --copy-command wl-copy"; };
       };
-
       # === ПРАВИЛА ОКОН ===
       window-rules = [
         # Скругленные углы для всех
         {
-          geometry-corner-radius = 15;
+          geometry-corner-radius = let r = 15.0; in {
+            top-left = r;
+            top-right = r;
+            bottom-left = r;
+            bottom-right = r;
+          };
           clip-to-geometry = true;
         }
         # PiP для LibreWolf
@@ -246,7 +255,24 @@
         # Рабочий стол 2
         { matches = [ { app-id = "librewolf"; } ]; open-on-workspace = "two"; }
         { matches = [ { app-id = "nvim"; } ]; open-on-workspace = "two"; }
-      ];
+      ];    
     };
   };
+  # === ПОДКЛЮЧЕНИЕ NOCTALIA.KDL ===
+  # Скрипт срабатывает ПОСЛЕ создания симлинков (linkGeneration).
+  # Он берёт read-only симлинк из Nix Store, превращает его в реальный файл
+  # и дописывает в конец строку include "noctalia.kdl"
+  home.activation.appendNoctaliaInclude = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    FILE="${config.xdg.configHome}/niri/config.kdl"
+    if [ -e "$FILE" ]; then
+      if [ -L "$FILE" ]; then
+        cp -L "$FILE" "$FILE.tmp"
+        rm "$FILE"
+        mv "$FILE.tmp" "$FILE"
+      fi
+      if ! grep -q 'include "noctalia.kdl"' "$FILE"; then
+        echo 'include "noctalia.kdl"' >> "$FILE"
+      fi
+    fi
+  '';
 }

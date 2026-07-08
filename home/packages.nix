@@ -3,13 +3,7 @@
 
 {
   home.packages = with pkgs; [
-    # Терминал и утилиты
-    kitty
-    btop
-    git
-    fzf
-    zoxide
-    
+
     # Мессенджеры и браузеры
     telegram-desktop
     librewolf
@@ -18,6 +12,10 @@
     inputs.noctalia.packages.${pkgs.system}.default
     
     # Прочее
-    yazi
+    v2rayn
+    xray
+    sing-box
   ];
+  xdg.dataFile."v2rayN/bin/xray/xray".source = "${pkgs.xray}/bin/xray";
+  xdg.dataFile."v2rayN/bin/sing_box/sing-box".source = "${pkgs.sing-box}/bin/sing-box";
 }

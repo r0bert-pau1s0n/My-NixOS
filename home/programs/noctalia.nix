@@ -1,9 +1,34 @@
 # ~/nix/home/programs/noctaliashell.nix
 { ... }:
 
-let
-  # Основной конфиг Noctalia Shell
-  noctaliaConfig = ''
+{
+ 
+  # === plugins.json ===
+  xdg.configFile."noctalia/plugins.json".text = ''
+    {
+        "sources": [
+            {
+                "enabled": true,
+                "name": "Noctalia Plugins",
+                "url": "https://github.com/noctalia-dev/noctalia-plugins"
+            }
+        ],
+        "states": {
+            "clipboard": {
+                "enabled": true,
+                "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+            },
+            "weather-indicator": {
+                "enabled": true,
+                "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+            }
+        },
+        "version": 2
+    }
+  '';
+
+  # === settings.json ===
+  xdg.configFile."noctalia/settings.json".text = ''
     {
         "appLauncher": {
             "autoPasteClipboard": false,
@@ -663,6 +688,10 @@ let
                 },
                 {
                     "enabled": true,
+                    "id": "pywalfox"
+                },
+                {
+                    "enabled": true,
                     "id": "cava"
                 },
                 {
@@ -684,10 +713,6 @@ let
                 {
                     "enabled": true,
                     "id": "telegram"
-                },
-                {
-                    "enabled": true,
-                    "id": "pywalfox"
                 }
             ],
             "enableUserTheming": true
@@ -753,42 +778,11 @@ let
     }
   '';
 
-  # Конфиг плагинов Noctalia Shell
-  noctaliaPlugins = ''
-    {
-        "sources": [
-            {
-                "enabled": true,
-                "name": "Noctalia Plugins",
-                "url": "https://github.com/noctalia-dev/noctalia-plugins"
-            }
-        ],
-        "states": {
-            "clipboard": {
-                "enabled": true,
-                "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
-            },
-            "weather-indicator": {
-                "enabled": true,
-                "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
-            }
-        },
-        "version": 2
-    }
-  '';
-
-  # Конфиг Matugen (шаблоны тем)
-  matugenConfig = ''
+  # === user-templates.toml ===
+  xdg.configFile."noctalia/user-templates.toml".text = ''
     [templates.nvim-base16]
     input_path = "~/.config/nvim/lua/matugen-template.lua"
     output_path = "~/.config/nvim/lua/matugen.lua"
     post_hook = 'pkill -SIGUSR1 nvim'
   '';
-
-in
-{
-  # Применяем конфиги через XDG (Home-Manager)
-  xdg.configFile."noctalia-shell/config.json".text = noctaliaConfig;
-  xdg.configFile."noctalia-shell/plugins.json".text = noctaliaPlugins;
-  xdg.configFile."matugen/config.toml".text = matugenConfig;
 }

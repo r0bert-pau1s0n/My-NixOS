@@ -10,8 +10,12 @@
     ripgrep
     zoxide
     fzf
+    ouch
     bat
     neovim
+    yazi
+    zsh
+    kitty
     
     # Сеть и Bluetooth
     bluez
