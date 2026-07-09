@@ -6,7 +6,7 @@
 
     # Официальный flake Niri (https://github.com/sodiboo/niri-flake)
     niri-flake.url = "github:sodiboo/niri-flake";
-
+    
     # Noctalia Shell
     noctalia = {
       url = "github:noctalia-dev/noctalia/legacy-v4";

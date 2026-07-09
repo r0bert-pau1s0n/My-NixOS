@@ -2,6 +2,9 @@
 { config, pkgs, inputs, ... }:
 
 {
+  # ДОБАВЛЕННАЯ СТРОКА: применяем оверлей niri-flake для Home Manager
+  nixpkgs.overlays = [ inputs.niri-flake.overlays.niri ];
+
   home = {
     username = "robert";
     homeDirectory = "/home/robert";

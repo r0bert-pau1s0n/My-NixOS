@@ -27,8 +27,9 @@
     cliphist
     satty
     polkit_gnome # Гуй для ввода пароля sudo
-    
-    # Шрифты (ставить лучше системно)
+  ];
+    # Правильная установка шрифтов
+  fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
   ];
 }

@@ -4,7 +4,8 @@
 {
   programs.niri = {
     enable = true;
-
+    # ДОБАВЛЕННАЯ СТРОКА: заставляем HM поставить новую версию
+    package = pkgs.niri-unstable;
     settings = {
       # === НАЧАЛЬНЫЙ ЗАПУСК ===
       spawn-at-startup = [
@@ -49,6 +50,15 @@
         GDK_BACKEND = "wayland";
         XDG_CURRENT_DESKTOP = "niri";
         XDG_SESSION_DESKTOP = "niri";
+      };
+
+      # === МОНИТОРЫ (OUTPUTS) ===
+      outputs."DP-3" = {
+        mode = {
+          width = 1920;
+          height = 1080;
+          refresh = 165.0; # 165 Гц
+        };
       };
 
       hotkey-overlay = { skip-at-startup = true; };
@@ -96,7 +106,7 @@
         "two" = {};
       };
 
- # === ГОРЯЧИЕ КЛАВИШИ (BINDS) ===
+      # === ГОРЯЧИЕ КЛАВИШИ (BINDS) ===
       binds = {
         # Система
         "Mod+Shift+Slash" = { action.show-hotkey-overlay = {}; };
@@ -232,6 +242,7 @@
         "Mod+Print" = { action.spawn-sh = "grim - | wl-copy"; };
         "Ctrl+Print" = { action.spawn-sh = "grim -g \"$(slurp)\" - | satty --filename - --fullscreen --floating-hack --copy-command wl-copy"; };
       };
+      
       # === ПРАВИЛА ОКОН ===
       window-rules = [
         # Скругленные углы для всех
@@ -259,19 +270,31 @@
     };
   };
   # === ПОДКЛЮЧЕНИЕ NOCTALIA.KDL ===
-  # Скрипт срабатывает ПОСЛЕ создания симлинков (linkGeneration).
-  # Он берёт read-only симлинк из Nix Store, превращает его в реальный файл
-  # и дописывает в конец строку include "noctalia.kdl"
+  # 0. Очищаем потенциально измененный файл ДО проверок Home Manager
+  home.activation.cleanupNiriConfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+    FILE="${config.xdg.configHome}/niri/config.kdl"
+    if [ -e "$FILE" ] && [ ! -L "$FILE" ]; then
+      rm -f "$FILE"
+    fi
+  '';
+
+  # 1. Запускаем скрипт ПОСЛЕ создания симлинков (linkGeneration)
   home.activation.appendNoctaliaInclude = lib.hm.dag.entryAfter ["linkGeneration"] ''
     FILE="${config.xdg.configHome}/niri/config.kdl"
     if [ -e "$FILE" ]; then
+      # Превращаем симлинк в реальный файл
       if [ -L "$FILE" ]; then
         cp -L "$FILE" "$FILE.tmp"
         rm "$FILE"
         mv "$FILE.tmp" "$FILE"
       fi
-      if ! grep -q 'include "noctalia.kdl"' "$FILE"; then
-        echo 'include "noctalia.kdl"' >> "$FILE"
+      
+      # Даём права на запись
+      chmod u+w "$FILE"
+      
+      # Добавляем include В КОНЕЦ файла (с переносом строки), если его еще нет
+      if ! grep -q 'include "./noctalia.kdl"' "$FILE"; then
+        printf '\ninclude "./noctalia.kdl"\n' >> "$FILE"
       fi
     fi
   '';

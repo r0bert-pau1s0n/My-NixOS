@@ -23,9 +23,10 @@
   # Network
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
+  services.resolved.enable = true;
 
   # Timezone
-  time.timeZone = "Europe/Perm";
+  time.timeZone = "Asia/Yekaterinburg";
 
   # Bluetooth
   hardware.bluetooth.enable = true;
@@ -43,10 +44,20 @@
     powerManagement.enable = false; # Для десктопов. Если ноутбук - лучше true
   };
 
-  # === Настройки для работы Niri и Wayland ===
-  # Системная часть Niri (порталы и базовое окружение)
-  programs.niri.enable = true;
-  
+  # 1. Добавляем оверлей от niri-flake
+  nixpkgs.overlays = [ inputs.niri-flake.overlays.niri ];
+
+  # 2. Включаем Niri и указываем пакет niri-unstable
+  programs.niri = {
+    enable = true;
+    package = pkgs.niri-unstable;
+  };  
+
+  # === Настройки монитора на уровне ядра (для NVIDIA) ===
+  # Формат: video=<порт>:<разрешение>@<частота>
+  # Это предотвращает моргание экрана и черные экраны при загрузке Wayland с проприетарными дровами
+  boot.kernelParams = [ "video=DP-3:1920x1080@165" ];
+
   # Переменные окружения для Wayland/NVIDIA
   environment.variables = {
     WLR_NO_HARDWARE_CURSORS = "1"; # Фикс курсора в Wayland на NVIDIA

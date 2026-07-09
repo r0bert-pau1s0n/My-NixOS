@@ -1,5 +1,5 @@
 # ~/nix/home/programs/kitty.nix
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.kitty = {
@@ -18,6 +18,8 @@
       cursor_trail = "1";
       window_padding_width = "5 10 2";
       
+      #Shell
+      shell = "${pkgs.zsh}/bin/zsh";
       # Графика
       enable_graphics = "yes";
     };
