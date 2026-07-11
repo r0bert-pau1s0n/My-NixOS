@@ -9,6 +9,7 @@
     settings = {
       # === НАЧАЛЬНЫЙ ЗАПУСК ===
       spawn-at-startup = [
+        { command = [ "dbus-update-activation-environment" "--all" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" ]; }
         { command = [ "xwayland-satellite" ]; }
         { command = [ "sh" "-c" "sleep 2 && export DISPLAY=:0" ]; }
         { command = [ "noctalia-shell" ]; }
@@ -43,6 +44,12 @@
       # === ОКРУЖЕНИЕ И CSD ===
       prefer-no-csd = true;
       
+      # === ПРЯМАЯ НАСТРОЙКА КУРСОРА ДЛЯ NIRI ===
+      cursor = {
+        theme = "Bibata-Modern-Classic";
+        size = 22;
+      };
+
       environment = {
         XDG_SESSION_TYPE = "wayland";
         MOZ_ENABLE_WAYLAND = "1";
@@ -57,7 +64,7 @@
         mode = {
           width = 1920;
           height = 1080;
-          refresh = 165.0; # 165 Гц
+          refresh = 165.003; # 165 Гц
         };
       };
 
@@ -259,6 +266,18 @@
         {
           matches = [ { app-id = "^librewolf$"; title = "^Picture-in-Picture$"; } ];
           open-floating = true;
+        }
+        # ПРАВИЛО ДЛЯ ПОРТАЛА (LibreWolf): Плавающее окно по центру
+        {
+          matches = [ { app-id = "^file_chooser$"; } ];
+          open-floating = true;
+          default-column-width = { fixed = 800; };
+          default-window-height = { fixed = 600; };
+        }
+        # Правило для проводника Yazi
+        {
+          matches = [ { app-id = "yazi"; } ];
+          open-floating = false; 
         }
         # Рабочий стол 1
         { matches = [ { app-id = "v2rayN"; } ]; open-on-workspace = "main"; }

@@ -6,5 +6,6 @@
     ./programs/kitty.nix
     ./programs/noctalia.nix
     ./programs/zsh.nix
+    ./programs/librewolf.nix
   ];
 }

@@ -14,8 +14,10 @@
     bat
     neovim
     yazi
+    btop
     zsh
     kitty
+    fastfetch 
     
     # Сеть и Bluetooth
     bluez
@@ -26,6 +28,8 @@
     wl-clipboard
     cliphist
     satty
+    grim
+    slurp
     polkit_gnome # Гуй для ввода пароля sudo
   ];
     # Правильная установка шрифтов

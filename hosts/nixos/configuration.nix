@@ -14,6 +14,7 @@
     device = "nodev";
     efiSupport = true;
     useOSProber = true;
+    gfxmodeEfi = "1920x1080";
   };
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -53,11 +54,6 @@
     package = pkgs.niri-unstable;
   };  
 
-  # === Настройки монитора на уровне ядра (для NVIDIA) ===
-  # Формат: video=<порт>:<разрешение>@<частота>
-  # Это предотвращает моргание экрана и черные экраны при загрузке Wayland с проприетарными дровами
-  boot.kernelParams = [ "video=DP-3:1920x1080@165" ];
-
   # Переменные окружения для Wayland/NVIDIA
   environment.variables = {
     WLR_NO_HARDWARE_CURSORS = "1"; # Фикс курсора в Wayland на NVIDIA
@@ -68,8 +64,17 @@
     enable = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome # Нужен для скриншотов и обмена буфером в Niri
+      xdg-desktop-portal-gnome 
+      xdg-desktop-portal-termfilechooser # <-- Добавляем терминальный портал
     ];
+    
+    config = {
+      common = {
+        default = [ "gtk" "gnome" ];
+        # Указываем системе, что выбор файлов делегируем termfilechooser
+        "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
+      };
+    };
   };
 
   security.polkit.enable = true;

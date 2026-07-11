@@ -6,26 +6,29 @@
     enable = true;
     enableCompletion = true;
     
-    # Включаем автодополнение (аналог плагина zsh-autosuggestions)
+    # Включаем встроенное автодополнение (это и есть zsh-autosuggestions)
     autosuggestion.enable = true;
-    
-    # Включаем подсветку синтаксиса (аналог плагина zsh-syntax-highlighting)
-    syntaxHighlighting.enable = true;
 
     # Настройка Oh My Zsh
     oh-my-zsh = {
       enable = true;
-      theme = "robbyrussell"; # Можете поменять на любую другую, например "agnoster"
-      
-      # ВСТРОЕННЫЕ плагины Oh My Zsh (без дополнительных установок)
+      theme = "robbyrussell"; # Можете поменять на любую другую
       plugins = [
         "git"
-        "sudo"        # Двойной ESC добавляет sudo перед командой
+        "sudo"
         "colored-man-pages"
         "command-not-found"
-        # Добавляйте сюда любые стандартные плагины OMZ
       ];
     };
+
+    # Подключение сторонних плагинов (fast-syntax-highlighting)
+    plugins = [
+      {
+        name = "fast-syntax-highlighting";
+        src = pkgs.zsh-fast-syntax-highlighting;
+        file = "share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh";
+      }
+    ];
 
     # Пользовательские алиасы
     shellAliases = {
@@ -36,7 +39,7 @@
       cleanup = "sudo nix-collect-garbage -d";
     };
 
-    # Дополнительные настройки (история, ключи и т.д.)
+    # Дополнительные настройки
     initExtra = ''
       # История команд
       HISTSIZE=10000
