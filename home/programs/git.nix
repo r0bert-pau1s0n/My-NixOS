@@ -5,8 +5,8 @@
     enable = true;
     
     # Имя и почта для коммитов
-    userName = "Robert Paulson";
-    userEmail = "r0bert-pau1s0n@users.noreply.github.com";
+    userName = "r0bert-pau1s0n";
+    userEmail = "287035553+r0bert-pau1s0n@users.noreply.github.com";
 
     # Цвета в терминале
     delta.enable = true; # Красивый diff при просмотре изменений
@@ -22,7 +22,7 @@
 
     # Базовые настройки
     extraConfig = {
-      init.defaultBranch = "master";
+      init.defaultBranch = "main";
       pull.rebase = false; # При pull создавать merge-коммиты
     };
   };
