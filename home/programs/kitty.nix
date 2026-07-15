@@ -1,4 +1,3 @@
-# ~/nix/home/programs/kitty.nix
 { pkgs, ... }:
 
 {
@@ -18,22 +17,17 @@
       cursor_trail = "1";
       window_padding_width = "5 10 2";
       
-      #Shell
-      shell = "${pkgs.zsh}/bin/zsh";
       # Графика
       enable_graphics = "yes";
     };
-    
-    # Туда выносим то, что не поддерживается стандартными настройками Nix
+
     extraConfig = ''
-      # Key bind (с кириллицей)
-      map ctrl+shift+с copy_to_clipboard 
+      map ctrl+shift+с copy_to_clipboard
       map ctrl+shift+м paste_from_clipboard
       map ctrl+backspace send_text all \x17
       map ctrl+shift+a select_all
       map ctrl+shift+g kitten kitty_grab/grab.py
 
-      # Color scheme (тема будет искать файл в ~/.config/kitty/themes/)
       include ~/.config/kitty/themes/noctalia.conf
     '';
   };

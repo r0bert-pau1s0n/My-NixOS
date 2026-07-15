@@ -1,8 +1,8 @@
-# ~/nix/home/programs/librewolf.nix
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 let
   allowedDomains = [
+    "https://duckduckgo.com"
     "https://rutracker.org"
     "https://mail.google.com"
     "https://proton.me"
@@ -37,11 +37,11 @@ in
 {
   programs.librewolf = {
     enable = true;
-    
+
     policies = {
       DisableTelemetry = true;
       DisableFirefoxStudies = true;
-      
+
       SearchEngines = {
         Default = "DuckDuckGo";
         Remove = [ "Google" "Bing" "Amazon.com" "eBay" "Twitter" "Perplexity" ];
@@ -74,10 +74,7 @@ in
         };
       };
 
-      # ВАЖНО: Блок EnableTrackingProtection ПОЛНОСТЬЮ УДАЛЕН!
-      # Именно он заставлял браузер переключаться в "Custom".
-
-      # Куки для доменов из закладок РАЗРЕШЕНЫ
+      # Куки для доменов из закладок разрешены
       Cookies = {
         Default = true;
         Allow = allowedDomains;
@@ -122,11 +119,11 @@ in
     profiles.default = {
       id = 0;
       isDefault = true;
-      
+
       settings = {
         # Запуск и сессия
         "browser.startup.page" = 3;
-        
+
         # Внешний вид и шрифты
         "browser.theme.content-theme" = 0;
         "browser.theme.toolbar-theme" = 0;
@@ -137,25 +134,25 @@ in
         "font.name.monospace.x-western" = "JetBrainsMono Nerd Font Mono";
         "font.name.sans-serif.x-western" = "JetBrainsMono Nerd Font Mono";
         "font.name.serif.x-western" = "JetBrainsMono Nerd Font Mono";
-        
-        # Масштаб по умолчанию (ИСПРАВЛЕНО: правильный параметр)
+
+        # Масштаб
         "zoom.defaultPercent" = 90;
-        
+
         # Полноэкранный режим
         "full-screen-api.transition-duration.enter" = "0";
         "full-screen-api.transition-duration.leave" = "0";
         "full-screen-api.warning.timeout" = 0;
-        
+
         # Новая вкладка и адресная строка
         "browser.newtabpage.activity-stream.showSearch" = false;
         "browser.urlbar.shortcuts.actions" = true;
-        
+
         # Прокси (v2rayN) и DNS
         "network.proxy.socks" = "127.0.0.1";
         "network.proxy.socks_port" = 10808;
         "network.trr.mode" = 3;
         "network.trr.uri" = "https://dns.quad9.net/dns-query";
-        
+
         # Сетевая безопасность
         "network.captive-portal-service.enabled" = false;
         "network.connectivity-service.enabled" = false;
@@ -167,44 +164,30 @@ in
         "network.prefetch-next" = false;
         "network.protocol-handler.expose.file" = true;
         "security.tls.enable_0rtt_data" = false;
-        
+
         # Регион
         "browser.region.network.url" = "";
         "browser.region.update.enabled" = false;
-        
+
         # Safebrowsing (отключено)
         "browser.safebrowsing.downloads.remote.block_potentially_unwanted" = false;
         "browser.safebrowsing.downloads.remote.block_uncommon" = false;
         "browser.safebrowsing.downloads.remote.enabled" = false;
         "browser.safebrowsing.downloads.remote.url" = "";
         "browser.safebrowsing.provider.google4.dataSharingURL" = "";
-        
-        # === МАКСИМАЛЬНАЯ ЗАЩИТА ОТ ТРЕКИНГА И ФИНГЕРПРИНТИНГА (STRICT) ===
-        # Базовые настройки Strict
+
+        # Защита от трекинга и фингерпринтинга (Strict)
         "browser.contentblocking.category" = "strict";
-        "network.cookie.cookieBehavior" = 5; # Total Cookie Protection (Изоляция)
-        
-        # Блокировка трекеров во всех окнах
+        "network.cookie.cookieBehavior" = 5;
         "privacy.trackingprotection.enabled" = true;
         "privacy.trackingprotection.pbmode.enabled" = true;
-        
-        # Блокировка социальных трекеров
         "privacy.trackingprotection.socialtracking.enabled" = true;
         "privacy.socialtracking.block_cookies.enabled" = true;
-        
-        # Блокировка криптомайнеров
         "privacy.trackingprotection.cryptomining.enabled" = true;
-        
-        # Блокировка известных фингерпринтеров
         "privacy.trackingprotection.fingerprinting.enabled" = true;
-        
-        # Максимальная защита от фингерпринтинга (RFP - Resist Fingerprinting)
-        # Это скрывает реальный размер шрифтов, экрана и шрифты системы
         "privacy.resistFingerprinting" = true;
         "privacy.fingerprintingProtection" = true;
-        "privacy.spoof_english" = 2; # Подменяет язык браузера на en-US
-        
-        # Дополнительная защита (Bounce Tracking и Query Stripping)
+        "privacy.spoof_english" = 2;
         "privacy.annotate_channels.strict_list.enabled" = true;
         "privacy.bounceTrackingProtection.mode" = 1;
         "privacy.query_stripping.enabled" = true;
@@ -214,22 +197,22 @@ in
         "privacy.trackingprotection.allow_list.convenience.enabled" = false;
         "privacy.globalprivacycontrol.was_ever_enabled" = true;
         "privacy.history.custom" = true;
-        
-        # Защита от утечек IP через WebRTC (ВАЖНО ДЛЯ ПРОКСИ)
+
+        # Защита от утечек IP через WebRTC
         "media.peerconnection.ice.default_address_only" = true;
         "media.peerconnection.ice.no_host" = true;
-        
+
         # HTTPS-Only Mode
         "dom.security.https_only_mode_ever_enabled" = true;
         "dom.security.https_only_mode_ever_enabled_pbm" = true;
-        
-        # DevTools (отключены удаленные отладчики)
+
+        # DevTools
         "devtools.console.stdout.chrome" = false;
         "devtools.debugger.remote-enabled" = false;
-        
-        # Прочие настройки
+
+        # Прочее
         "intl.accept_languages" = "en-US, en";
-        "browser.download.lastDir" = "/home/robert/Downloads";
+        "browser.download.lastDir" = "${config.home.homeDirectory}/Downloads";
         "widget.use-xdg-desktop-portal.file-picker" = 1;
         "permissions.manager.defaultsUrl" = "";
       };

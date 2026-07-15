@@ -1,111 +1,35 @@
-# ~/nix/hosts/nixos/configuration.nix
-{ config, lib, pkgs, inputs, ... }:
+{ inputs, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
+    ./boot.nix
+    ./networking.nix
+    ./nvidia.nix
+    ./desktop.nix
+    ./services.nix
     ./packages.nix
+    ./users.nix
+    ./fonts.nix
+    ./docker.nix
   ];
 
-  # Bootloader
-  boot.loader.systemd-boot.enable = false;
-  boot.loader.grub = {
-    enable = true;
-    device = "nodev";
-    efiSupport = true;
-    useOSProber = true;
-    gfxmodeEfi = "1920x1080";
+  # Nix
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    # Noctalia binary cache
+    extra-substituters = [ "https://noctalia.cachix.org" ];
+    extra-trusted-public-keys = [
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+    ];
   };
-  boot.loader.efi.canTouchEfiVariables = true;
 
-  # Nix Flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-
-  # Network
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
-  services.resolved.enable = true;
-
-  # Timezone
-  time.timeZone = "Asia/Yekaterinburg";
-
-  # Bluetooth
-  hardware.bluetooth.enable = true;
-
-  # === Графика и NVIDIA (Специфика для GTX 1660 Ti) ===
-  hardware.graphics.enable = true;
-  hardware.graphics.enable32Bit = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
+  # Разрешить unfree-пакеты (NVIDIA, Telegram и т.д.)
   nixpkgs.config.allowUnfree = true;
-  
-  hardware.nvidia = {
-    modesetting.enable = true; # Обязательно для Wayland
-    open = false; # 1660 Ti (Turing) требует проприетарные драйверы, NVK/open пока не для неё
-    package = config.boot.kernelPackages.nvidiaPackages.production;
-    powerManagement.enable = false; # Для десктопов. Если ноутбук - лучше true
-  };
 
-  # 1. Добавляем оверлей от niri-flake
+  # Оверлей Niri — даёт pkgs.niri-unstable
+  # Применяется один раз на уровне системы, home-manager наследует через useGlobalPkgs
   nixpkgs.overlays = [ inputs.niri-flake.overlays.niri ];
 
-  # 2. Включаем Niri и указываем пакет niri-unstable
-  programs.niri = {
-    enable = true;
-    package = pkgs.niri-unstable;
-  };  
-
-  # Переменные окружения для Wayland/NVIDIA
-  environment.variables = {
-    WLR_NO_HARDWARE_CURSORS = "1"; # Фикс курсора в Wayland на NVIDIA
-    NIXOS_OZONE_WL = "1"; # Заставляет Electron-приложения (Discord, VSCode) работать в Wayland
-  };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-      xdg-desktop-portal-gnome 
-      xdg-desktop-portal-termfilechooser # <-- Добавляем терминальный портал
-    ];
-    
-    config = {
-      common = {
-        default = [ "gtk" "gnome" ];
-        # Указываем системе, что выбор файлов делегируем termfilechooser
-        "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
-      };
-    };
-  };
-
-  security.polkit.enable = true;
-  programs.dconf.enable = true;
-
-  # Звук
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-  
-  # Слой совместимости
-  programs.nix-ld.enable = true;
-  
-  # User
-  users.users.robert = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "input" "networkmanager" "video" ]; # Добавлена группа video для NVIDIA
-    packages = with pkgs; [ tree ];
-  };
-
-  # === Настройки для корректной работы Noctalia ===
-  services.upower.enable = true;
-  services.power-profiles-daemon.enable = true;
-  nix.settings = {
-    extra-substituters = [ "https://noctalia.cachix.org" ];
-    extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
-  };
-  services.chrony.enable = true;
-  
   system.stateVersion = "26.05";
 }

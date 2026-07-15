@@ -1,8 +1,6 @@
-# ~/nix/home/programs/noctaliashell.nix
-{ ... }:
+{ config, lib, ... }: # <--- Добавлены аргументы
 
 {
- 
   # === plugins.json ===
   xdg.configFile."noctalia/plugins.json".text = ''
     {
@@ -48,8 +46,7 @@
             "iconMode": "tabler",
             "ignoreMouseInput": true,
             "overviewLayer": false,
-            "pinnedApps": [
-            ],
+            "pinnedApps": [],
             "position": "follow_bar",
             "screenshotAnnotationTool": "",
             "showCategories": false,
@@ -59,8 +56,7 @@
             "viewMode": "list"
         },
         "audio": {
-            "mprisBlacklist": [
-            ],
+            "mprisBlacklist": [],
             "preferredPlayer": "",
             "spectrumFrameRate": 30,
             "spectrumMirrored": true,
@@ -90,8 +86,7 @@
             "middleClickAction": "none",
             "middleClickCommand": "",
             "middleClickFollowMouse": false,
-            "monitors": [
-            ],
+            "monitors": [],
             "mouseWheelAction": "none",
             "mouseWheelWrap": true,
             "outerCorners": true,
@@ -100,8 +95,7 @@
             "rightClickAction": "controlCenter",
             "rightClickCommand": "",
             "rightClickFollowMouse": true,
-            "screenOverrides": [
-            ],
+            "screenOverrides": [],
             "showCapsule": true,
             "showOnWorkspaceSwitch": true,
             "showOutline": false,
@@ -246,7 +240,7 @@
                         "colorizeSystemText": "none",
                         "customIconPath": "",
                         "enableColorization": true,
-                        "icon": "noctalia",
+                        "icon": "brand-snowflake",
                         "id": "ControlCenter",
                         "useDistroLogo": false
                     }
@@ -254,26 +248,16 @@
             }
         },
         "brightness": {
-            "backlightDeviceMappings": [
-            ],
+            "backlightDeviceMappings": [],
             "brightnessStep": 5,
             "enableDdcSupport": true,
             "enforceMinimum": true
         },
         "calendar": {
             "cards": [
-                {
-                    "enabled": true,
-                    "id": "calendar-header-card"
-                },
-                {
-                    "enabled": true,
-                    "id": "calendar-month-card"
-                },
-                {
-                    "enabled": true,
-                    "id": "weather-card"
-                }
+                { "enabled": true, "id": "calendar-header-card" },
+                { "enabled": true, "id": "calendar-month-card" },
+                { "enabled": true, "id": "weather-card" }
             ]
         },
         "colorSchemes": {
@@ -285,65 +269,31 @@
             "predefinedScheme": "Kanagawa",
             "schedulingMode": "off",
             "syncGsettings": true,
-            "useWallpaperColors": true 
+            "useWallpaperColors": true
         },
         "controlCenter": {
             "cards": [
-                {
-                    "enabled": true,
-                    "id": "profile-card"
-                },
-                {
-                    "enabled": true,
-                    "id": "shortcuts-card"
-                },
-                {
-                    "enabled": true,
-                    "id": "audio-card"
-                },
-                {
-                    "enabled": false,
-                    "id": "brightness-card"
-                },
-                {
-                    "enabled": true,
-                    "id": "weather-card"
-                },
-                {
-                    "enabled": true,
-                    "id": "media-sysmon-card"
-                }
+                { "enabled": true, "id": "profile-card" },
+                { "enabled": true, "id": "shortcuts-card" },
+                { "enabled": true, "id": "audio-card" },
+                { "enabled": false, "id": "brightness-card" },
+                { "enabled": true, "id": "weather-card" },
+                { "enabled": true, "id": "media-sysmon-card" }
             ],
             "diskPath": "/",
             "position": "top_center",
             "shortcuts": {
                 "left": [
-                    {
-                        "id": "Network"
-                    },
-                    {
-                        "id": "Bluetooth"
-                    },
-                    {
-                        "id": "WallpaperSelector"
-                    },
-                    {
-                        "id": "NoctaliaPerformance"
-                    }
+                    { "id": "Network" },
+                    { "id": "Bluetooth" },
+                    { "id": "WallpaperSelector" },
+                    { "id": "NoctaliaPerformance" }
                 ],
                 "right": [
-                    {
-                        "id": "Notifications"
-                    },
-                    {
-                        "id": "PowerProfile"
-                    },
-                    {
-                        "id": "KeepAwake"
-                    },
-                    {
-                        "id": "NightLight"
-                    }
+                    { "id": "Notifications" },
+                    { "id": "PowerProfile" },
+                    { "id": "KeepAwake" },
+                    { "id": "NightLight" }
                 ]
             }
         },
@@ -352,11 +302,7 @@
             "gridSnap": false,
             "gridSnapScale": false,
             "monitorWidgets": [
-                {
-                    "name": "DP-3",
-                    "widgets": [
-                    ]
-                }
+                { "name": "DP-3", "widgets": [] }
             ],
             "overviewEnabled": true
         },
@@ -381,11 +327,9 @@
             "launcherIconColor": "none",
             "launcherPosition": "end",
             "launcherUseDistroLogo": false,
-            "monitors": [
-            ],
+            "monitors": [],
             "onlySameOutput": true,
-            "pinnedApps": [
-            ],
+            "pinnedApps": [],
             "pinnedStatic": false,
             "position": "bottom",
             "showDockIndicator": false,
@@ -412,36 +356,20 @@
             "forceBlackScreenCorners": true,
             "iRadiusRatio": 1,
             "keybinds": {
-                "keyDown": [
-                    "Down"
-                ],
-                "keyEnter": [
-                    "Return",
-                    "Enter"
-                ],
-                "keyEscape": [
-                    "Esc"
-                ],
-                "keyLeft": [
-                    "Left"
-                ],
-                "keyRemove": [
-                    "Del"
-                ],
-                "keyRight": [
-                    "Right"
-                ],
-                "keyUp": [
-                    "Up"
-                ]
+                "keyDown": ["Down"],
+                "keyEnter": ["Return", "Enter"],
+                "keyEscape": ["Esc"],
+                "keyLeft": ["Left"],
+                "keyRemove": ["Del"],
+                "keyRight": ["Right"],
+                "keyUp": ["Up"]
             },
             "language": "en",
             "lockOnSuspend": true,
             "lockScreenAnimations": false,
             "lockScreenBlur": 0,
             "lockScreenCountdownDuration": 10000,
-            "lockScreenMonitors": [
-            ],
+            "lockScreenMonitors": [],
             "lockScreenTint": 0,
             "passwordChars": false,
             "radiusRatio": 1,
@@ -535,8 +463,7 @@
             "enabled": true,
             "location": "top_right",
             "lowUrgencyDuration": 3,
-            "monitors": [
-            ],
+            "monitors": [],
             "normalUrgencyDuration": 8,
             "overlayLayer": true,
             "respectExpireTimeout": false,
@@ -559,14 +486,9 @@
             "autoHideMs": 2000,
             "backgroundOpacity": 1,
             "enabled": true,
-            "enabledTypes": [
-                0,
-                1,
-                2
-            ],
+            "enabledTypes": [0, 1, 2],
             "location": "top",
-            "monitors": [
-            ],
+            "monitors": [],
             "overlayLayer": true
         },
         "plugins": {
@@ -580,62 +502,14 @@
             "largeButtonsStyle": false,
             "position": "top_center",
             "powerOptions": [
-                {
-                    "action": "shutdown",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": true,
-                    "keybind": "1"
-                },
-                {
-                    "action": "suspend",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": true,
-                    "keybind": "2"
-                },
-                {
-                    "action": "reboot",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": true,
-                    "keybind": "3"
-                },
-                {
-                    "action": "rebootToUefi",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": true,
-                    "keybind": "4"
-                },
-                {
-                    "action": "lock",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": true,
-                    "keybind": "5"
-                },
-                {
-                    "action": "hibernate",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": false,
-                    "keybind": ""
-                },
-                {
-                    "action": "logout",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": false,
-                    "keybind": ""
-                },
-                {
-                    "action": "userspaceReboot",
-                    "command": "",
-                    "countdownEnabled": true,
-                    "enabled": false,
-                    "keybind": ""
-                }
+                { "action": "shutdown", "command": "", "countdownEnabled": true, "enabled": true, "keybind": "1" },
+                { "action": "suspend", "command": "", "countdownEnabled": true, "enabled": true, "keybind": "2" },
+                { "action": "reboot", "command": "", "countdownEnabled": true, "enabled": true, "keybind": "3" },
+                { "action": "rebootToUefi", "command": "", "countdownEnabled": true, "enabled": true, "keybind": "4" },
+                { "action": "lock", "command": "", "countdownEnabled": true, "enabled": true, "keybind": "5" },
+                { "action": "hibernate", "command": "", "countdownEnabled": true, "enabled": false, "keybind": "" },
+                { "action": "logout", "command": "", "countdownEnabled": true, "enabled": false, "keybind": "" },
+                { "action": "userspaceReboot", "command": "", "countdownEnabled": true, "enabled": false, "keybind": "" }
             ],
             "showHeader": true,
             "showKeybinds": true
@@ -666,50 +540,17 @@
         },
         "templates": {
             "activeTemplates": [
-                {
-                    "enabled": true,
-                    "id": "niri"
-                },
-                {
-                    "enabled": true,
-                    "id": "btop"
-                },
-                {
-                    "enabled": true,
-                    "id": "yazi"
-                },
-                {
-                    "enabled": true,
-                    "id": "qt"
-                },
-                {
-                    "enabled": true,
-                    "id": "kitty"
-                },
-                {
-                    "enabled": true,
-                    "id": "pywalfox"
-                },
-                {
-                    "enabled": true,
-                    "id": "cava"
-                },
-                {
-                    "enabled": true,
-                    "id": "kcolorscheme"
-                },
-                {
-                    "enabled": true,
-                    "id": "discord"
-                },
-                {
-                    "enabled": true,
-                    "id": "gtk"
-                },
-                {
-                    "enabled": true,
-                    "id": "code"
-                }
+                { "enabled": true, "id": "niri" },
+                { "enabled": true, "id": "btop" },
+                { "enabled": true, "id": "yazi" },
+                { "enabled": true, "id": "qt" },
+                { "enabled": true, "id": "kitty" },
+                { "enabled": true, "id": "pywalfox" },
+                { "enabled": true, "id": "cava" },
+                { "enabled": true, "id": "kcolorscheme" },
+                { "enabled": true, "id": "discord" },
+                { "enabled": true, "id": "gtk" },
+                { "enabled": true, "id": "code" }
             ],
             "enableUserTheming": true
         },
@@ -732,14 +573,12 @@
             "directory": "/home/robert/.config/wallpapers",
             "enableMultiMonitorDirectories": false,
             "enabled": true,
-            "favorites": [
-            ],
+            "favorites": [],
             "fillColor": "#000000",
             "fillMode": "crop",
             "hideWallpaperFilenames": false,
             "linkLightAndDarkWallpapers": true,
-            "monitorDirectories": [
-            ],
+            "monitorDirectories": [],
             "overviewBlur": 0.4,
             "overviewEnabled": false,
             "overviewTint": 0.6,
@@ -752,9 +591,7 @@
             "sortOrder": "name",
             "transitionDuration": 1500,
             "transitionEdgeSmoothness": 0.05,
-            "transitionType": [
-                "fade"
-            ],
+            "transitionType": ["fade"],
             "useOriginalImages": false,
             "useSolidColor": false,
             "useWallhaven": false,
@@ -774,186 +611,213 @@
     }
   '';
 
-  # === Шаблон Telegram (Физический файл) ===
+  # === Шаблон Telegram ===
   xdg.configFile."noctalia/templates/telegram.tdesktop-theme".text = ''
-// Material You theme for Telegram Desktop
-// Generated by Noctalia's Template Processor
+    // Material You theme for Telegram Desktop
+    // Generated by Noctalia's Template Processor
 
-COLOR_GRAY: {{colors.outline.default.hex}};
-COLOR_DARK: {{colors.surface_variant.default.hex}};
+    COLOR_GRAY: {{colors.outline.default.hex}};
+    COLOR_DARK: {{colors.surface_variant.default.hex}};
 
-windowBg: {{colors.background.default.hex}}; // Main background
-sideMenuBg: {{colors.background.default.hex}}; // Фон узкой панели слева
-sideMenuBgOver: {{colors.surface_variant.default.hex}}; // Фон панели при наведении
-sideMenuFg: {{colors.on_surface.default.hex}}; // Цвет иконок (три полоски)
-sideMenuFgOver: {{colors.on_surface_variant.default.hex}}; // Цвет иконок при наведении
-sideBarBg: {{colors.background.default.hex}}; // Filters side bar background
-sideBarBgActive: {{colors.primary_container.default.hex}}; // Filters side bar active
-sideBarTextFgActive: {{colors.primary.default.hex}}; // Filters side bar active text
-sideBarIconFgActive: {{colors.primary.default.hex}}; // Filters side bar active icon
-sideBarBadgeBg: {{colors.primary.default.hex}}; // Filters side bar badge
-sideBarTextFg: {{colors.on_surface.default.hex}}; // Filters side bar text
-sideBarBadgeBgMuted: {{colors.surface_variant.default.hex}}; // Filters side bar unimp background
-sideBarBgRipple: {{colors.surface_variant.default.hex}}; // Filters side bar ripple
-sideBarIconFg: {{colors.on_surface_variant.default.hex}}; // Filters side bar icon
-windowFg: {{colors.on_background.default.hex}}; // Main text
-windowBgOver: {{colors.surface_variant.default.hex}}; // Generic background on hover
-windowBgRipple: {{colors.surface_variant.default.hex}}; // Ripple effect
-windowFgOver: {{colors.on_surface_variant.default.hex}}; // Text on hover
-windowSubTextFg: {{colors.outline.default.hex}}; // Minor text
-windowSubTextFgOver: {{colors.outline.default.hex}}; // Minor text on hover
-windowBoldFg: {{colors.on_background.default.hex}}; // Bold text
-windowBoldFgOver: {{colors.on_surface_variant.default.hex}}; // Bold text on hover
-windowBgActive: {{colors.primary.default.hex}}; // Active items background
-windowFgActive: {{colors.on_primary.default.hex}}; // Active items text
-windowActiveTextFg: {{colors.primary.default.hex}}; // Active items text
-windowShadowFg: {{colors.shadow.default.hex}}; // Window shadow
-windowShadowFgFallback: {{colors.shadow.default.hex}}; // Fallback for shadow
-historyOutIconFg: {{colors.primary.default.hex}};
-historyIconFgInverted: {{colors.on_surface.default.hex}};
-historyBg: {{colors.background.default.hex}}; // Chat background (solid color)
-historyComposeAreaBg: {{colors.surface.default.hex}}; // Message input area
-historyComposeAreaFg: {{colors.on_surface.default.hex}};
-historyComposeAreaBorderFg: {{colors.outline.default.hex}};
-historyScrollBg: {{colors.primary.default.hex}}40;
-historyScrollBgOver: {{colors.primary.default.hex}}70;
-historyUnreadBarBg: {{colors.primary.default.hex}};
-historyUnreadBarFg: {{colors.on_primary.default.hex}};
-historyToDownBg: {{colors.surface.default.hex}};
-historyToDownBgOver: {{colors.surface_variant.default.hex}};
-historyToDownFg: {{colors.on_surface.default.hex}};
-historyReplyBg: {{colors.surface_variant.default.hex}};
-historyReplyHoverBg: {{colors.surface_variant.default.hex}};
-historyForwardChooseBg: {{colors.surface.default.hex}};
-historyPinnedBg: {{colors.surface.default.hex}};
-historyPinnedShadow: {{colors.shadow.default.hex}};
+    windowBg: {{colors.background.default.hex}};
+    sideMenuBg: {{colors.background.default.hex}};
+    sideMenuBgOver: {{colors.surface_variant.default.hex}};
+    sideMenuFg: {{colors.on_surface.default.hex}};
+    sideMenuFgOver: {{colors.on_surface_variant.default.hex}};
+    sideBarBg: {{colors.background.default.hex}};
+    sideBarBgActive: {{colors.primary_container.default.hex}};
+    sideBarTextFgActive: {{colors.primary.default.hex}};
+    sideBarIconFgActive: {{colors.primary.default.hex}};
+    sideBarBadgeBg: {{colors.primary.default.hex}};
+    sideBarTextFg: {{colors.on_surface.default.hex}};
+    sideBarBadgeBgMuted: {{colors.surface_variant.default.hex}};
+    sideBarBgRipple: {{colors.surface_variant.default.hex}};
+    sideBarIconFg: {{colors.on_surface_variant.default.hex}};
+    windowFg: {{colors.on_background.default.hex}};
+    windowBgOver: {{colors.surface_variant.default.hex}};
+    windowBgRipple: {{colors.surface_variant.default.hex}};
+    windowFgOver: {{colors.on_surface_variant.default.hex}};
+    windowSubTextFg: {{colors.outline.default.hex}};
+    windowSubTextFgOver: {{colors.outline.default.hex}};
+    windowBoldFg: {{colors.on_background.default.hex}};
+    windowBoldFgOver: {{colors.on_surface_variant.default.hex}};
+    windowBgActive: {{colors.primary.default.hex}};
+    windowFgActive: {{colors.on_primary.default.hex}};
+    windowActiveTextFg: {{colors.primary.default.hex}};
+    windowShadowFg: {{colors.shadow.default.hex}};
+    windowShadowFgFallback: {{colors.shadow.default.hex}};
+    historyOutIconFg: {{colors.primary.default.hex}};
+    historyIconFgInverted: {{colors.on_surface.default.hex}};
+    historyBg: {{colors.background.default.hex}};
+    historyComposeAreaBg: {{colors.surface.default.hex}};
+    historyComposeAreaFg: {{colors.on_surface.default.hex}};
+    historyComposeAreaBorderFg: {{colors.outline.default.hex}};
+    historyScrollBg: {{colors.primary.default.hex}}40;
+    historyScrollBgOver: {{colors.primary.default.hex}}70;
+    historyUnreadBarBg: {{colors.primary.default.hex}};
+    historyUnreadBarFg: {{colors.on_primary.default.hex}};
+    historyToDownBg: {{colors.surface.default.hex}};
+    historyToDownBgOver: {{colors.surface_variant.default.hex}};
+    historyToDownFg: {{colors.on_surface.default.hex}};
+    historyReplyBg: {{colors.surface_variant.default.hex}};
+    historyReplyHoverBg: {{colors.surface_variant.default.hex}};
+    historyForwardChooseBg: {{colors.surface.default.hex}};
+    historyPinnedBg: {{colors.surface.default.hex}};
+    historyPinnedShadow: {{colors.shadow.default.hex}};
 
-msgServiceBg: {{colors.primary_container.default.hex}};
-msgServiceFg: {{colors.on_surface.default.hex}};
-msgOutBg: {{colors.primary_container.default.hex}};
-msgOutBgSelected : {{colors.tertiary_container.default.hex}};
-msgOutServiceFg: {{colors.on_surface.default.hex}};
-msgOutDateFg: {{colors.on_surface.default.hex}};
-historySentIconFg: {{colors.on_surface.default.hex}};
-msgOutDateFgSelected: {{colors.on_surface.default.hex}};
-msgDateImgFg: {{colors.on_surface.default.hex}};
-dialogsSentIconFg: {{colors.primary.default.hex}};
-dialogsSentIconFgOver: {{colors.primary.default.hex}};
-dialogsOnlineBadgeFg: {{colors.primary.default.hex}};
+    msgServiceBg: {{colors.primary_container.default.hex}};
+    msgServiceFg: {{colors.on_surface.default.hex}};
+    msgOutBg: {{colors.primary_container.default.hex}};
+    msgOutBgSelected : {{colors.tertiary_container.default.hex}};
+    msgOutServiceFg: {{colors.on_surface.default.hex}};
+    msgOutDateFg: {{colors.on_surface.default.hex}};
+    historySentIconFg: {{colors.on_surface.default.hex}};
+    msgOutDateFgSelected: {{colors.on_surface.default.hex}};
+    msgDateImgFg: {{colors.on_surface.default.hex}};
+    dialogsSentIconFg: {{colors.primary.default.hex}};
+    dialogsSentIconFgOver: {{colors.primary.default.hex}};
+    dialogsOnlineBadgeFg: {{colors.primary.default.hex}};
 
-shadowFg: {{colors.shadow.default.hex}}; // General shadow
-slideFadeOutBg: {{colors.background.default.hex}};
-slideFadeOutShadowFg: {{colors.shadow.default.hex}};
+    shadowFg: {{colors.shadow.default.hex}};
+    slideFadeOutBg: {{colors.background.default.hex}};
+    slideFadeOutShadowFg: {{colors.shadow.default.hex}};
 
-imageBg: {{colors.surface.default.hex}};
-imageBgTransparent: {{colors.surface.default.hex}};
+    imageBg: {{colors.surface.default.hex}};
+    imageBgTransparent: {{colors.surface.default.hex}};
 
-activeButtonBg: {{colors.primary.default.hex}}; // Active button background
-activeButtonBgOver: {{colors.primary_container.default.hex}}; // Active button hover background
-activeButtonBgRipple: {{colors.on_primary_container.default.hex}}; // Active button ripple
-activeButtonFg: {{colors.on_primary.default.hex}}; // Active button text
-activeButtonFgOver: {{colors.on_primary_container.default.hex}}; // Active button hover text
-activeButtonSecondaryFg: {{colors.on_primary.default.hex}}; // Active button secondary text
-activeButtonSecondaryFgOver: {{colors.on_primary_container.default.hex}}; // Active button secondary hover text
-activeLineFg: {{colors.on_surface.default.hex}};
-dialogsBgActive: {{colors.primary.default.hex}};
+    activeButtonBg: {{colors.primary.default.hex}};
+    activeButtonBgOver: {{colors.primary_container.default.hex}};
+    activeButtonBgRipple: {{colors.on_primary_container.default.hex}};
+    activeButtonFg: {{colors.on_primary.default.hex}};
+    activeButtonFgOver: {{colors.on_primary_container.default.hex}};
+    activeButtonSecondaryFg: {{colors.on_primary.default.hex}};
+    activeButtonSecondaryFgOver: {{colors.on_primary_container.default.hex}};
+    activeLineFg: {{colors.on_surface.default.hex}};
+    dialogsBgActive: {{colors.primary.default.hex}};
 
-lightButtonBg: {{colors.surface.default.hex}}; // Light button background
-lightButtonBgOver: {{colors.surface_variant.default.hex}}; // Light button hover background
-lightButtonBgRipple: {{colors.primary.default.hex}}; // Light button ripple
-lightButtonFg: {{colors.on_surface.default.hex}}; // Light button text
-lightButtonFgOver: {{colors.on_surface_variant.default.hex}}; // Light button hover text
+    lightButtonBg: {{colors.surface.default.hex}};
+    lightButtonBgOver: {{colors.surface_variant.default.hex}};
+    lightButtonBgRipple: {{colors.primary.default.hex}};
+    lightButtonFg: {{colors.on_surface.default.hex}};
+    lightButtonFgOver: {{colors.on_surface_variant.default.hex}};
 
-attentionButtonFg: {{colors.error.default.hex}};
-attentionButtonFgOver: {{colors.error.default.hex}};
-attentionButtonBgOver: {{colors.error_container.default.hex}};
-attentionButtonBgRipple: {{colors.on_error_container.default.hex}};
+    attentionButtonFg: {{colors.error.default.hex}};
+    attentionButtonFgOver: {{colors.error.default.hex}};
+    attentionButtonBgOver: {{colors.error_container.default.hex}};
+    attentionButtonBgRipple: {{colors.on_error_container.default.hex}};
 
-outlineButtonBg: {{colors.surface.default.hex}}; // Outline button background
-outlineButtonBgOver: {{colors.surface_variant.default.hex}}; // Outline button hover background
-outlineButtonOutlineFg: {{colors.primary.default.hex}}; // Outline button color
-outlineButtonBgRipple: {{colors.primary.default.hex}}; // Outline button ripple
+    outlineButtonBg: {{colors.surface.default.hex}};
+    outlineButtonBgOver: {{colors.surface_variant.default.hex}};
+    outlineButtonOutlineFg: {{colors.primary.default.hex}};
+    outlineButtonBgRipple: {{colors.primary.default.hex}};
 
-menuBg: {{colors.surface.default.hex}};
-menuBgOver: {{colors.surface_variant.default.hex}};
-menuBgRipple: {{colors.primary.default.hex}};
-menuIconFg: {{colors.on_surface.default.hex}};
-menuIconFgOver: {{colors.on_surface_variant.default.hex}};
-menuSubmenuArrowFg: {{colors.outline.default.hex}};
-menuFgDisabled: {{colors.outline.default.hex}};
-menuSeparatorFg: {{colors.outline.default.hex}};
+    menuBg: {{colors.surface.default.hex}};
+    menuBgOver: {{colors.surface_variant.default.hex}};
+    menuBgRipple: {{colors.primary.default.hex}};
+    menuIconFg: {{colors.on_surface.default.hex}};
+    menuIconFgOver: {{colors.on_surface_variant.default.hex}};
+    menuSubmenuArrowFg: {{colors.outline.default.hex}};
+    menuFgDisabled: {{colors.outline.default.hex}};
+    menuSeparatorFg: {{colors.outline.default.hex}};
 
-scrollBarBg: {{colors.primary.default.hex}}40; // Scroll bar background (40% opacity)
-scrollBarBgOver: {{colors.primary.default.hex}}60; // Scroll bar hover background (60% opacity)
-scrollBg: {{colors.surface_variant.default.hex}}40; // Scroll bar track (40% opacity)
-scrollBgOver: {{colors.surface_variant.default.hex}}60; // Scroll bar track on hover (60% opacity)
+    scrollBarBg: {{colors.primary.default.hex}}40;
+    scrollBarBgOver: {{colors.primary.default.hex}}60;
+    scrollBg: {{colors.surface_variant.default.hex}}40;
+    scrollBgOver: {{colors.surface_variant.default.hex}}60;
 
-smallCloseIconFg: {{colors.outline.default.hex}};
-smallCloseIconFgOver: {{colors.on_surface_variant.default.hex}};
+    smallCloseIconFg: {{colors.outline.default.hex}};
+    smallCloseIconFgOver: {{colors.on_surface_variant.default.hex}};
 
-radialFg: {{colors.primary.default.hex}};
-radialBg: {{colors.surface.default.hex}};
+    radialFg: {{colors.primary.default.hex}};
+    radialBg: {{colors.surface.default.hex}};
 
-placeholderFg: {{colors.outline.default.hex}}; // Placeholder text
-placeholderFgActive: {{colors.primary.default.hex}}; // Active placeholder text
-inputBorderFg: {{colors.outline.default.hex}}; // Input border
-filterInputBorderFg: {{colors.outline.default.hex}}; // Search input border
-filterInputInactiveBg: {{colors.surface.default.hex}}; // Inactive search input background
-checkboxFg: {{colors.primary.default.hex}}; // Checkbox color
+    placeholderFg: {{colors.outline.default.hex}};
+    placeholderFgActive: {{colors.primary.default.hex}};
+    inputBorderFg: {{colors.outline.default.hex}};
+    filterInputBorderFg: {{colors.outline.default.hex}};
+    filterInputInactiveBg: {{colors.surface.default.hex}};
+    checkboxFg: {{colors.primary.default.hex}};
 
-titleBg: {{colors.surface.default.hex}}; // Window title background
-titleShadow: {{colors.shadow.default.hex}};
-titleButtonFg: {{colors.on_surface.default.hex}}; // Title button color
-titleButtonBgOver: {{colors.surface_variant.default.hex}}; // Title button hover background
-titleButtonFgOver: {{colors.on_surface_variant.default.hex}}; // Title button hover color
-titleButtonCloseBgOver: {{colors.error.default.hex}};
-titleButtonCloseFgOver: {{colors.on_error.default.hex}};
-titleFgActive: {{colors.on_surface.default.hex}}; // Active title text
-titleFg: {{colors.on_surface.default.hex}}; // Inactive title text
+    titleBg: {{colors.surface.default.hex}};
+    titleShadow: {{colors.shadow.default.hex}};
+    titleButtonFg: {{colors.on_surface.default.hex}};
+    titleButtonBgOver: {{colors.surface_variant.default.hex}};
+    titleButtonFgOver: {{colors.on_surface_variant.default.hex}};
+    titleButtonCloseBgOver: {{colors.error.default.hex}};
+    titleButtonCloseFgOver: {{colors.on_error.default.hex}};
+    titleFgActive: {{colors.on_surface.default.hex}};
+    titleFg: {{colors.on_surface.default.hex}};
 
-trayCounterBg: {{colors.error.default.hex}}; // Tray counter background
-trayCounterBgMute: {{colors.outline.default.hex}}; // Muted tray counter background
-trayCounterFg: {{colors.on_error.default.hex}}; // Tray counter text
-trayCounterBgMacInvert: {{colors.error.default.hex}}; // Mac tray counter
-trayCounterFgMacInvert: {{colors.on_error.default.hex}}; // Mac tray counter text
+    trayCounterBg: {{colors.error.default.hex}};
+    trayCounterBgMute: {{colors.outline.default.hex}};
+    trayCounterFg: {{colors.on_error.default.hex}};
+    trayCounterBgMacInvert: {{colors.error.default.hex}};
+    trayCounterFgMacInvert: {{colors.on_error.default.hex}};
 
-layerBg: {{colors.surface.default.hex}}99; // Layer background (60% opacity)
+    layerBg: {{colors.surface.default.hex}}99;
 
-cancelIconFg: {{colors.error.default.hex}}; // Cancel icon
-cancelIconFgOver: {{colors.error.default.hex}}; // Cancel icon on hover
+    cancelIconFg: {{colors.error.default.hex}};
+    cancelIconFgOver: {{colors.error.default.hex}};
 
-boxBg: {{colors.surface.default.hex}}; // Box background
-boxTextFg: {{colors.on_surface.default.hex}}; // Box text
-boxTextFgGood: {{colors.primary.default.hex}}; // Box good text
-boxTextFgError: {{colors.error.default.hex}}; // Box error text
-boxTitleFg: {{colors.on_surface.default.hex}}; // Box title text
-boxSearchBg: {{colors.surface.default.hex}}; // Box search field background
-boxSearchCancelIconFg: {{colors.error.default.hex}}; // Box search cancel icon
-boxSearchCancelIconFgOver: {{colors.error.default.hex}}; // Box search cancel icon on hover
+    boxBg: {{colors.surface.default.hex}};
+    boxTextFg: {{colors.on_surface.default.hex}};
+    boxTextFgGood: {{colors.primary.default.hex}};
+    boxTextFgError: {{colors.error.default.hex}};
+    boxTitleFg: {{colors.on_surface.default.hex}};
+    boxSearchBg: {{colors.surface.default.hex}};
+    boxSearchCancelIconFg: {{colors.error.default.hex}};
+    boxSearchCancelIconFgOver: {{colors.error.default.hex}};
 
-contactsBg: {{colors.surface.default.hex}}; // Contacts background
-contactsBgOver: {{colors.surface_variant.default.hex}}; // Contacts background on hover
-contactsNameFg: {{colors.on_surface.default.hex}}; // Contact name
-contactsStatusFg: {{colors.outline.default.hex}}; // Contact status
-contactsStatusFgOver: {{colors.on_surface_variant.default.hex}}; // Contact status on hover
-contactsStatusFgOnline: {{colors.primary.default.hex}}; // Online contact status
+    contactsBg: {{colors.surface.default.hex}};
+    contactsBgOver: {{colors.surface_variant.default.hex}};
+    contactsNameFg: {{colors.on_surface.default.hex}};
+    contactsStatusFg: {{colors.outline.default.hex}};
+    contactsStatusFgOver: {{colors.on_surface_variant.default.hex}};
+    contactsStatusFgOnline: {{colors.primary.default.hex}};
 
-photoCropFadeBg: {{colors.surface.default.hex}}cc; // Photo crop fade background
-photoCropPointFg: {{colors.primary.default.hex}}; // Photo crop points
+    photoCropFadeBg: {{colors.surface.default.hex}}cc;
+    photoCropPointFg: {{colors.primary.default.hex}};
 
-chat_inBubbleSelected: {{colors.surface_variant.default.hex}}; // inbox selected chat background
-chat_outBubbleSelected: {{colors.tertiary_container.default.hex}}; // outbox selected chat background
+    chat_inBubbleSelected: {{colors.surface_variant.default.hex}};
+    chat_outBubbleSelected: {{colors.tertiary_container.default.hex}};
   '';
 
   # === user-templates.toml ===
   xdg.configFile."noctalia/user-templates.toml".text = ''
     [templates.nvim-base16]
     input_path = "~/.config/nvim/lua/matugen-template.lua"
-    output_path = "~/.config/nvim/lua/matugen.lua"
+    output_path = "/home/robert/.config/nvim/lua/matugen.lua"
     post_hook = 'pkill -SIGUSR1 nvim'
 
     [templates.telegram]
     input_path = "~/.config/noctalia/templates/telegram.tdesktop-theme"
     output_path = "/home/robert/.config/telegram-desktop/themes/noctalia.tdesktop-theme"
+  '';
+
+  # === ИНТЕГРАЦИЯ NOCTALIA В КОНФИГ NIRI ===
+  # Niri-flake создаёт симлинк на config.kdl, но Noctalia нужно дописать
+  # свой include в конец файла. Эти activation-скрипты:
+  # 1. Удаляют файл перед проверками HM (если это не симлинк)
+  # 2. После создания симлинка превращают его в реальный файл и дописывают include
+  home.activation.cleanupNiriConfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+    FILE="${config.xdg.configHome}/niri/config.kdl"
+    if [ -e "$FILE" ] && [ ! -L "$FILE" ]; then
+      rm -f "$FILE"
+    fi
+  '';
+
+  home.activation.appendNoctaliaInclude = lib.hm.dag.entryAfter ["linkGeneration"] ''
+    FILE="${config.xdg.configHome}/niri/config.kdl"
+    if [ -e "$FILE" ]; then
+      if [ -L "$FILE" ]; then
+        cp -L "$FILE" "$FILE.tmp"
+        rm "$FILE"
+        mv "$FILE.tmp" "$FILE"
+      fi
+      chmod u+w "$FILE"
+      if ! grep -q 'include "./noctalia.kdl"' "$FILE"; then
+        printf '\ninclude "./noctalia.kdl"\n' >> "$FILE"
+      fi
+    fi
   '';
 }

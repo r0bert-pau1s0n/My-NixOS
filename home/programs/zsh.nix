@@ -1,27 +1,17 @@
-# ~/nix/home/programs/zsh.nix
 { pkgs, ... }:
 
 {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    
-    # Включаем встроенное автодополнение (это и есть zsh-autosuggestions)
     autosuggestion.enable = true;
 
-    # Настройка Oh My Zsh
     oh-my-zsh = {
       enable = true;
-      theme = "robbyrussell"; # Можете поменять на любую другую
-      plugins = [
-        "git"
-        "sudo"
-        "colored-man-pages"
-        "command-not-found"
-      ];
+      theme = "robbyrussell";
+      plugins = [ "git" "sudo" "colored-man-pages" "command-not-found" ];
     };
 
-    # Подключение сторонних плагинов (fast-syntax-highlighting)
     plugins = [
       {
         name = "fast-syntax-highlighting";
@@ -30,18 +20,16 @@
       }
     ];
 
-    # Пользовательские алиасы
     shellAliases = {
       ll = "ls -l";
       la = "ls -a";
+      # Одна команда обновляет и систему, и Home Manager
       update = "sudo nixos-rebuild switch --flake ~/nix#nixos";
-      homeup = "home-manager switch --flake ~/nix#robert";
       cleanup = "sudo nix-collect-garbage -d";
     };
 
-    # Дополнительные настройки
-    initExtra = ''
-      # История команд
+    # Заменили initExtra на initContent
+    initContent = ''
       HISTSIZE=10000
       SAVEHIST=10000
       setopt HIST_IGNORE_DUPS

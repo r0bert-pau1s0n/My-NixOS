@@ -1,24 +1,17 @@
-# ~/nix/hosts/nixos/packages.nix
 { pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
     # Системные утилиты
-    git
+    #git установка через home-manager
     curl
     fd
     ripgrep
-    zoxide
-    fzf
+    #zoxide установка через home-manager
+    #fzf установка через home-manager
     ouch
-    bat
-    neovim
-    yazi
-    btop
-    zsh
-    kitty
-    fastfetch 
-    
+    #bat установка через home-manager
+
     # Сеть и Bluetooth
     bluez
     openssh
@@ -31,9 +24,5 @@
     grim
     slurp
     polkit_gnome # Гуй для ввода пароля sudo
-  ];
-    # Правильная установка шрифтов
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
   ];
 }
