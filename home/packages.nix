@@ -10,12 +10,14 @@
     
     # Инструменты разработки (нужны для nvim-treesitter и lazy.nvim)
     neovim
+    (ansible.override { extraPackages = ps: with ps; [ boto3 docker kubernetes ]; })
     gcc
     gnumake
     unzip
 
     # Браузер
     #librewolf (установка через home-manager)
+    qbittorrent
     
     # V2rayN и ядра
     v2rayn
@@ -24,7 +26,8 @@
 
     # Мессенджеры
     telegram-desktop
-    
+    spotify 
+    steam
     # Noctalia Shell (берем пакет из flake-инпута)
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];

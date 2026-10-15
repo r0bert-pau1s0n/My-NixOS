@@ -2,10 +2,14 @@
   description = "My NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    # Нестабильная ветка для самых свежих пакетов
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Niri compositor
-    niri-flake.url = "github:sodiboo/niri-flake";
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Noctalia Shell
     noctalia = {
@@ -13,9 +17,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Home Manager
+    # Home Manager — ветка master для совместимости с unstable
     home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -23,16 +27,34 @@
   outputs = { self, nixpkgs, home-manager, niri-flake, noctalia, ... }@inputs:
   let
     system = "x86_64-linux";
+
+    # ─────────────────────────────────────────────────────
+    # Временный overlay для исправления удалённой библиотеки
+    # libdisplay-info_0_2 (удалена из nixpkgs unstable)
+    #
+    # TODO: Удалить после исправления в niri-flake
+    # ─────────────────────────────────────────────────────
+    fixLibdisplayInfo = final: prev: {
+      libdisplay-info_0_2 = final.libdisplay-info;
+    };
+
   in {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       specialArgs = { inherit inputs; };
+
       modules = [
-        ./hosts/nixos/configuration.nix
-        niri-flake.nixosModules.niri
-        
-        home-manager.nixosModules.home-manager
+        # Модуль с overlay и базовыми настройками
         {
           nixpkgs.hostPlatform = system;
+          nixpkgs.overlays = [ fixLibdisplayInfo ];
+        }
+
+        ./hosts/nixos/configuration.nix
+
+        niri-flake.nixosModules.niri
+
+        home-manager.nixosModules.home-manager
+        {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = { inherit inputs; };

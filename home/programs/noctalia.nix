@@ -541,6 +541,7 @@
         "templates": {
             "activeTemplates": [
                 { "enabled": true, "id": "niri" },
+                { "enabled": true, "id": "steam" },
                 { "enabled": true, "id": "btop" },
                 { "enabled": true, "id": "yazi" },
                 { "enabled": true, "id": "qt" },

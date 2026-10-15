@@ -12,6 +12,7 @@
     ./users.nix
     ./fonts.nix
     ./docker.nix
+    ./ssh.nix
   ];
 
   # Nix

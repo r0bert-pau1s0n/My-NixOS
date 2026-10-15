@@ -5,7 +5,7 @@
   # https://github.com/sodiboo/niri-flake
   programs.niri = {
     enable = true;
-    package = pkgs.niri-unstable;
+    package = pkgs.niri;
   };
 
   # XDG Desktop Portals
