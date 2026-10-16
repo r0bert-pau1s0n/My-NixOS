@@ -23,6 +23,29 @@
         source = "wallpaper";
         wallpaper_scheme = "m3-tonal-spot";
         sync_color_scheme = true;
+
+        # Декларативный список шаблонов (зеркалит runtime settings.toml).
+        # pywalfox: Noctalia генерирует ~/.cache/wal/colors.json и ставит
+        # native messaging host для расширения Pywalfox (см. миграцию ниже).
+        templates = {
+          enable_community_templates = true;
+          builtin_ids = [
+            "btop"
+            "gtk3"
+            "kitty"
+            "niri"
+            "qt"
+          ];
+          community_ids = [
+            "opencode"
+            "pywalfox"
+            "discord"
+            "telegram"
+            "neovim"
+            "steam"
+            "yazi"
+          ];
+        };
       };
 
       # ── Оболочка ──────────────────────────────────────────────────────
@@ -99,6 +122,19 @@
       ];
     };
   };
+
+  # Pywalfox: от v4 остался «чужой» native messaging manifest, указывающий на
+  # несуществующий store-путь pywalfox-native 2.9.0. Noctalia (firefox-theme)
+  # не перезаписывает чужие host'ы, поэтому её собственный manifest не ставился
+  # и расширение не могло подключиться к daemon. Удаляем легаси-файл (с бэкапом),
+  # только если он ещё не указывает на noctalia. Идемпотентно.
+  home.activation.noctaliaPywalfoxMigration = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mf="$HOME/.mozilla/native-messaging-hosts/pywalfox.json"
+    if [ -f "$mf" ] && ! grep -q 'noctalia' "$mf"; then
+      $DRY_RUN_CMD cp -a "$mf" "$mf.pywalfox-native.bak"
+      $DRY_RUN_CMD rm -f "$mf"
+    fi
+  '';
 
   # niri-flake создаёт config.kdl как симлинк, а от v4 остался обычный файл
   # (его дописывал activation-хук appendNoctaliaInclude). Удаляем его перед
