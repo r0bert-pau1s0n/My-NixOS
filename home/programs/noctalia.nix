@@ -2,6 +2,7 @@
   inputs,
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -73,6 +74,14 @@
         auto_locate = false;
         address = "Perm";
       };
+
+      # ── Хуки ──────────────────────────────────────────────────────────
+      # После смены палитры Noctalia перегенерирует themes/noctalia.conf
+      # (include в kitty.conf), но штатный templates/kitty/apply.sh падает на
+      # read-only store-симлинке kitty.conf и не доходит до pkill -USR1.
+      # Поэтому шлём kitty сигнал перезагрузки конфига сами: открытые окна
+      # перекрашиваются без перезапуска. `|| true` — если kitty не запущен.
+      hooks.colors_changed = [ "${pkgs.procps}/bin/pkill -USR1 -x kitty || true" ];
     };
   };
 
