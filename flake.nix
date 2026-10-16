@@ -17,6 +17,13 @@
       url = "github:noctalia-dev/noctalia/cachix";
     };
 
+    # Millennium — официальный моддинг-фреймворк для тем/плагинов Steam.
+    # Нужен для интеграции Steam template Noctalia (Material Theme + Matugen).
+    # inputs.nixpkgs.follows НЕ задаём: у флейка свой bun/nixpkgs (см. их flake.nix).
+    millennium = {
+      url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
+    };
+
     # Home Manager — ветка master для совместимости с unstable
     home-manager = {
       url = "github:nix-community/home-manager/master";

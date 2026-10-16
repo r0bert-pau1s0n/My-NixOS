@@ -35,6 +35,7 @@
     # Мессенджеры
     telegram-desktop
     spotify
-    steam
+    # Steam с Millennium (overlay в modules/common.nix) — для темы Noctalia
+    millennium-steam
   ];
 }

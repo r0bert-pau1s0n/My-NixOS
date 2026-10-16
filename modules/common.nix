@@ -23,5 +23,7 @@
   nixpkgs.overlays = [
     # pkgs.niri-unstable
     inputs.niri-flake.overlays.niri
+    # pkgs.millennium / pkgs.millennium-steam (Steam + Millennium)
+    inputs.millennium.overlays.default
   ];
 }
