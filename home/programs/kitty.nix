@@ -1,4 +1,4 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
   programs.kitty = {
@@ -31,4 +31,14 @@
       include ~/.config/kitty/themes/noctalia.conf
     '';
   };
+
+  # Если Noctalia ещё не сгенерировала динамическую тему, кладём нейтральный
+  # fallback. Файл создаётся только при отсутствии и не является симлинком,
+  # поэтому Noctalia может перезаписать его своей темой позже.
+  home.activation.installKittyFallbackTheme = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    themeFile="${config.xdg.configHome}/kitty/themes/noctalia.conf"
+    if [ ! -e "$themeFile" ]; then
+      $DRY_RUN_CMD install -D -m 0644 ${./kitty-noctalia-fallback.conf} "$themeFile"
+    fi
+  '';
 }

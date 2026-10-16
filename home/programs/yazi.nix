@@ -1,4 +1,4 @@
-{ ... }:
+{ config, lib, ... }:
 
 {
   # Устанавливаем Yazi и включаем интеграцию с Zsh
@@ -192,4 +192,14 @@
       light = "noctalia"
     '';
   };
+
+  # Если Noctalia ещё не сгенерировала flavor noctalia, кладём нейтральный
+  # fallback. Файл создаётся только при отсутствии и не является симлинком,
+  # поэтому Noctalia может перезаписать его своим flavor позже.
+  home.activation.installYaziFallbackFlavor = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    flavorFile="${config.xdg.configHome}/yazi/flavors/noctalia.yazi/flavor.toml"
+    if [ ! -e "$flavorFile" ]; then
+      $DRY_RUN_CMD install -D -m 0644 ${./yazi-noctalia-flavor.toml} "$flavorFile"
+    fi
+  '';
 }

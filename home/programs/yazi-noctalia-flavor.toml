@@ -1,0 +1,13 @@
+# Резервный нейтральный flavor Yazi (One Dark).
+# Используется, пока Noctalia не сгенерирует flavors/noctalia.yazi/flavor.toml.
+# Noctalia (community-шаблон yazi) перезапишет этот файл при первом применении темы.
+[app]
+overall = { bg = "#282c34" }
+
+[mgr]
+cwd = { fg = "#abb2bf" }
+find_keyword = { fg = "#e06c75", bold = true }
+border_style = { fg = "#61afef" }
+
+[status]
+overall = { fg = "#abb2bf" }
