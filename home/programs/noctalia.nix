@@ -76,15 +76,26 @@
       };
 
       # ── Хуки ──────────────────────────────────────────────────────────
-      # После смены палитры Noctalia перегенерирует themes/noctalia.conf
-      # (include в kitty.conf), но штатный templates/kitty/apply.sh падает на
-      # read-only store-симлинке kitty.conf и не доходит до pkill -USR1.
-      # Поэтому шлём kitty сигнал перезагрузки конфига сами: открытые окна
-      # перекрашиваются без перезапуска (kitty.apply_new_options обновляет
-      # цвета и делает refresh). NixOS-обёртка kitty называется `.kitty-wrapped`,
-      # поэтому пробуем оба имени процесса; `|| true` — если kitty не запущен.
+      # После смены палитры Noctalia перегенерирует цвета у уже запущенных
+      # приложений без их перезапуска. Хуки выполняются после того, как все
+      # шаблоны записаны на диск.
+      #
+      # kitty: перегенерируется themes/noctalia.conf (include в kitty.conf), но
+      # штатный templates/kitty/apply.sh падает на read-only store-симлинке
+      # kitty.conf и не доходит до pkill -USR1. Поэтому шлём kitty сигнал
+      # перезагрузки конфига сами: открытые окна перекрашиваются без
+      # перезапуска (kitty.apply_new_options). NixOS-обёртка kitty называется
+      # `.kitty-wrapped`, поэтому пробуем оба имени процесса; `|| true` — если
+      # kitty не запущен.
+      #
+      # yazi: шаблон сначала перезаписывает flavors/noctalia.yazi/flavor.toml,
+      # после чего рассылаем action `app:theme` через DDS (receiver 0 =
+      # broadcast всем инстансам) — каждый запущенный yazi перечитывает flavor
+      # с диска вживую, сохраняя точные цвета Noctalia. `|| true` — если yazi
+      # не запущен (нет DDS-сервера).
       hooks.colors_changed = [
         "${pkgs.procps}/bin/pkill -USR1 -x '.kitty-wrapped' || ${pkgs.procps}/bin/pkill -USR1 -x kitty || true"
+        "${pkgs.yazi}/bin/ya emit-to 0 app:theme || true"
       ];
     };
   };

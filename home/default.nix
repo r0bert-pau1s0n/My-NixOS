@@ -13,6 +13,7 @@
     ./programs/portals.nix
     ./programs/nvim/nvim.nix
     ./programs/yazi.nix
+    ./programs/opencode.nix
     ./programs/tmux.nix
     ./programs/git.nix
     ./programs/cli-tools.nix
