@@ -15,13 +15,6 @@
         ];
       }
       { command = [ "xwayland-satellite" ]; }
-      {
-        command = [
-          "sh"
-          "-c"
-          "sleep 2 && export DISPLAY=:0"
-        ];
-      }
       { command = [ "noctalia" ]; }
       { command = [ "v2rayN" ]; }
       {
