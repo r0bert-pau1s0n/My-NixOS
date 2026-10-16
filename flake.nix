@@ -11,10 +11,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Noctalia Shell
+    # Noctalia Shell v5 — ветка cachix (последний закэшированный коммит).
+    # ВАЖНО: inputs.nixpkgs.follows НЕ задаём — иначе слетает бинарный кэш.
     noctalia = {
-      url = "github:noctalia-dev/noctalia/legacy-v4";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:noctalia-dev/noctalia/cachix";
     };
 
     # Home Manager — ветка master для совместимости с unstable

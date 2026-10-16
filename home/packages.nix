@@ -14,6 +14,7 @@
     gcc
     gnumake
     unzip
+    opencode
 
     # Браузер
     #librewolf (установка через home-manager)
@@ -28,7 +29,5 @@
     telegram-desktop
     spotify 
     steam
-    # Noctalia Shell (берем пакет из flake-инпута)
-    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

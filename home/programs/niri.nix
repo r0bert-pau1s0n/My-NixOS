@@ -7,7 +7,7 @@
       { command = [ "dbus-update-activation-environment" "--all" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" ]; }
       { command = [ "xwayland-satellite" ]; }
       { command = [ "sh" "-c" "sleep 2 && export DISPLAY=:0" ]; }
-      { command = [ "noctalia-shell" ]; }
+      { command = [ "noctalia" ]; }
       { command = [ "v2rayN" ]; }
       { command = [ "sh" "-c" "sleep 2 && Telegram" ]; }
       { command = [ "librewolf" ]; }
@@ -64,6 +64,9 @@
     };
 
     hotkey-overlay = { skip-at-startup = true; };
+
+    # Разрешает активацию окон и действия уведомлений от Noctalia (v5)
+    debug = { "honor-xdg-activation-with-invalid-serial" = true; };
 
     # === LAYOUT ===
     layout = {
@@ -126,12 +129,12 @@
       "Mod+D" = { action.spawn = "code"; hotkey-overlay.title = "VS Code"; };
       "Mod+E" = { action.spawn = [ "kitty" "--app-id" "yazi" "-e" "yazi" ]; hotkey-overlay.title = "File Manager: Yazi"; };
 
-      # Утилиты Noctalia
-      "Mod+Y" = { action.spawn = [ "noctalia-shell" "ipc" "call" "controlCenter" "toggle" ]; hotkey-overlay.title = "Control Center: noctalia controlCenter"; };
-      "Mod+R" = { action.spawn = [ "noctalia-shell" "ipc" "call" "launcher" "toggle" ]; hotkey-overlay.title = "Application Launcher: Noctalia"; };
-      "Mod+V" = { action.spawn = [ "noctalia-shell" "ipc" "call" "plugin:clipboard" "toggle" ]; hotkey-overlay.title = "Clipboard History: Noctalia"; };
-      "Mod+Shift+V" = { action.spawn = [ "noctalia-shell" "ipc" "call" "plugin:clipboard" "wipe" ]; hotkey-overlay.title = "Clipboard Wipe: Noctalia"; };
-      "Mod+Shift+Q" = { action.spawn = [ "noctalia-shell" "ipc" "call" "sessionMenu" "toggle" ]; hotkey-overlay.title = "Session Menu: noctalia sessionMenu"; };
+      # Утилиты Noctalia v5 (IPC: `noctalia msg <команда>`)
+      "Mod+Y" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "control-center" ]; hotkey-overlay.title = "Control Center: noctalia control-center"; };
+      "Mod+R" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "launcher" ]; hotkey-overlay.title = "Application Launcher: Noctalia"; };
+      "Mod+V" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "clipboard" ]; hotkey-overlay.title = "Clipboard History: Noctalia"; };
+      "Mod+Shift+V" = { action.spawn = [ "noctalia" "msg" "clipboard-clear" ]; hotkey-overlay.title = "Clipboard Wipe: Noctalia"; };
+      "Mod+Shift+Q" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "session" ]; hotkey-overlay.title = "Session Menu: noctalia session"; };
 
       # Фокус
       "Mod+H" = { action.focus-column-left = {}; };
@@ -279,6 +282,13 @@
       { matches = [ { app-id = "librewolf"; } ]; open-on-workspace = "two"; }
       { matches = [ { app-id = "kitty"; } ]; open-on-workspace = "two"; }
       # { matches = [ { app-id = "nvim"; } ]; open-on-workspace = "two"; }
+      # Окно настроек Noctalia v5 — плавающее, фиксированный размер
+      {
+        matches = [ { app-id = "^dev\\.noctalia\\.Noctalia$"; } ];
+        open-floating = true;
+        default-column-width = { fixed = 1080; };
+        default-window-height = { fixed = 920; };
+      }
     ];
   };
 }
