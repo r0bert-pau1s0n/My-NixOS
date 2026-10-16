@@ -620,7 +620,7 @@
         open-on-workspace = "main";
       }
       {
-        matches = [ { app-id = "Telegram"; } ];
+        matches = [ { app-id = "^org\\.telegram\\.desktop$"; } ];
         open-on-workspace = "main";
       }
       {
