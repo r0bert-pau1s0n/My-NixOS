@@ -1,0 +1,9 @@
+# Сборка NixOS
+/result
+/result-*
+
+# Direnv
+/.direnv/
+
+# Образы/артефакты
+*.qcow2

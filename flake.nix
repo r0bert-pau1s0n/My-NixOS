@@ -24,43 +24,44 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, niri-flake, noctalia, ... }@inputs:
-  let
-    system = "x86_64-linux";
+  outputs =
+    {
+      self,
+      nixpkgs,
+      ...
+    }@inputs:
+    let
+      system = "x86_64-linux";
+      inherit (nixpkgs) lib;
+      pkgs = nixpkgs.legacyPackages.${system};
 
-    # ─────────────────────────────────────────────────────
-    # Временный overlay для исправления удалённой библиотеки
-    # libdisplay-info_0_2 (удалена из nixpkgs unstable)
-    #
-    # TODO: Удалить после исправления в niri-flake
-    # ─────────────────────────────────────────────────────
-    fixLibdisplayInfo = final: prev: {
-      libdisplay-info_0_2 = final.libdisplay-info;
+      # Общий конструктор системы. Всё, что зависит от машины,
+      # живёт в ./hosts/<host>/ (см. README.md).
+      mkHost =
+        host:
+        lib.nixosSystem {
+          specialArgs = { inherit inputs host; };
+          modules = [ ./hosts/${host}/default.nix ];
+        };
+    in
+    {
+      nixosConfigurations = {
+        nixos = mkHost "nixos";
+      };
+
+      # `nix fmt`
+      formatter.${system} = pkgs.nixfmt;
+
+      # `nix develop`
+      devShells.${system}.default = pkgs.mkShell {
+        packages = with pkgs; [
+          nixfmt
+          deadnix
+          statix
+        ];
+      };
+
+      # `nix flake check` реально собирает систему
+      checks.${system}.nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
     };
-
-  in {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-      specialArgs = { inherit inputs; };
-
-      modules = [
-        # Модуль с overlay и базовыми настройками
-        {
-          nixpkgs.hostPlatform = system;
-          nixpkgs.overlays = [ fixLibdisplayInfo ];
-        }
-
-        ./hosts/nixos/configuration.nix
-
-        niri-flake.nixosModules.niri
-
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-          home-manager.users.robert = import ./home/home.nix;
-        }
-      ];
-    };
-  };
 }

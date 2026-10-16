@@ -1,0 +1,11 @@
+# Линты statix, которые мы сознательно не применяем.
+# empty_pattern (W10): `{ ... }:` — идиоматичная сигнатура NixOS-модуля;
+# замена на `_:` ухудшает читаемость.
+disabled = [
+  "empty_pattern"
+]
+
+# Генерируется `nixos-generate-config`, править вручную нельзя.
+ignore = [
+  "hosts/*/hardware-configuration.nix"
+]

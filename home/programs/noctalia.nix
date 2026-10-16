@@ -1,4 +1,9 @@
-{ inputs, config, lib, ... }:
+{
+  inputs,
+  config,
+  lib,
+  ...
+}:
 
 {
   # Официальный Home Manager-модуль Noctalia v5.
@@ -23,7 +28,6 @@
       shell = {
         font_family = "JetBrainsMono Nerd Font Mono";
         lang = "en";
-        avatar_path = "/home/robert/.face";
         telemetry_enabled = false;
         setup_wizard_enabled = false;
         animation.enabled = false;
@@ -39,7 +43,11 @@
         radius = 12;
         background_opacity = 1.0;
         widget_spacing = 6;
-        start = [ "workspaces" "active-window" "audio-visualizer" ];
+        start = [
+          "workspaces"
+          "active-window"
+          "audio-visualizer"
+        ];
         center = [ "clock" ];
         end = [
           "sysmon"
@@ -57,7 +65,7 @@
       # ── Обои ──────────────────────────────────────────────────────────
       wallpaper = {
         enabled = true;
-        directory = "/home/robert/.config/wallpapers";
+        directory = "${config.xdg.configHome}/wallpapers";
       };
 
       # ── Локация/погода ────────────────────────────────────────────────

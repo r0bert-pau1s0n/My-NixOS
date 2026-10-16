@@ -1,30 +1,52 @@
-{ ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
+  # Мониторы (outputs) и автозапуск (spawn-at-startup) — host-специфичны
+  # и заданы в hosts/<host>/home.nix.
   programs.niri.settings = {
-    # === ЗАПУСК ПРИ СТАРТЕ ===
-    spawn-at-startup = [
-      { command = [ "dbus-update-activation-environment" "--all" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP" ]; }
-      { command = [ "xwayland-satellite" ]; }
-      { command = [ "sh" "-c" "sleep 2 && export DISPLAY=:0" ]; }
-      { command = [ "noctalia" ]; }
-      { command = [ "v2rayN" ]; }
-      { command = [ "sh" "-c" "sleep 2 && Telegram" ]; }
-      { command = [ "librewolf" ]; }
-      { command = [ "sh" "-c" "sleep 2 && kitty" ]; }
-      # { command = [ "sh" "-c" "sleep 2 && kitty --app-id nvim -e nvim" ]; }
-    ];
-
     # === АНИМАЦИИ ===
     animations = {
-      window-open = { kind.spring = { damping-ratio = 1.0; stiffness = 600; epsilon = 0.001; }; };
-      window-close = { kind.spring = { damping-ratio = 1.0; stiffness = 500; epsilon = 0.001; }; };
-      workspace-switch = { kind.spring = { damping-ratio = 0.8; stiffness = 1000; epsilon = 0.001; }; };
-      horizontal-view-movement = { kind.spring = { damping-ratio = 0.8; stiffness = 1000; epsilon = 0.0001; }; };
+      window-open = {
+        kind.spring = {
+          damping-ratio = 1.0;
+          stiffness = 600;
+          epsilon = 0.001;
+        };
+      };
+      window-close = {
+        kind.spring = {
+          damping-ratio = 1.0;
+          stiffness = 500;
+          epsilon = 0.001;
+        };
+      };
+      workspace-switch = {
+        kind.spring = {
+          damping-ratio = 0.8;
+          stiffness = 1000;
+          epsilon = 0.001;
+        };
+      };
+      horizontal-view-movement = {
+        kind.spring = {
+          damping-ratio = 0.8;
+          stiffness = 1000;
+          epsilon = 0.0001;
+        };
+      };
     };
 
     # === ВВОД ===
-    gestures = { hot-corners = { enable = false; }; };
+    gestures = {
+      hot-corners = {
+        enable = false;
+      };
+    };
 
     input = {
       keyboard = {
@@ -34,7 +56,10 @@
         };
         numlock = true;
       };
-      touchpad = { tap = true; natural-scroll = true; };
+      touchpad = {
+        tap = true;
+        natural-scroll = true;
+      };
     };
 
     # === ОКРУЖЕНИЕ ===
@@ -55,18 +80,16 @@
     };
 
     # === МОНИТОРЫ ===
-    outputs."DP-3" = {
-      mode = {
-        width = 1920;
-        height = 1080;
-        refresh = 165.003;
-      };
+    # outputs заданы в hosts/<host>/home.nix
+
+    hotkey-overlay = {
+      skip-at-startup = true;
     };
 
-    hotkey-overlay = { skip-at-startup = true; };
-
     # Разрешает активацию окон и действия уведомлений от Noctalia (v5)
-    debug = { "honor-xdg-activation-with-invalid-serial" = true; };
+    debug = {
+      "honor-xdg-activation-with-invalid-serial" = true;
+    };
 
     # === LAYOUT ===
     layout = {
@@ -80,7 +103,9 @@
         { fixed = 960; }
       ];
 
-      default-column-width = { proportion = 0.5; };
+      default-column-width = {
+        proportion = 0.5;
+      };
 
       focus-ring = {
         width = 2;
@@ -92,7 +117,9 @@
         };
       };
 
-      border = { enable = false; };
+      border = {
+        enable = false;
+      };
 
       shadow = {
         enable = true;
@@ -100,176 +127,487 @@
         softness = 20;
         spread = 2;
         color = "#1f1f2870";
-        offset = { x = 0; y = 3; };
+        offset = {
+          x = 0;
+          y = 3;
+        };
       };
     };
 
     # === РАБОЧИЕ СТОЛЫ ===
     workspaces = {
-      "main" = {};
-      "two" = {};
+      "main" = { };
+      "two" = { };
     };
 
     # === ГОРЯЧИЕ КЛАВИШИ ===
     binds = {
       # Система
-      "Mod+Shift+Slash" = { action.show-hotkey-overlay = {}; };
-      "Super+Alt+L" = { action.spawn = "swaylock"; hotkey-overlay.title = "Lock the Screen: swaylock"; };
-      "Mod+Shift+P" = { action.power-off-monitors = {}; };
-      "Mod+M" = { action.quit = {}; };
-      "Ctrl+Alt+Delete" = { action.quit = {}; };
-      "Mod+Escape" = { action.toggle-keyboard-shortcuts-inhibit = {}; allow-inhibiting = false; };
+      "Mod+Shift+Slash" = {
+        action.show-hotkey-overlay = { };
+      };
+      "Super+Alt+L" = {
+        action.spawn = "swaylock";
+        hotkey-overlay.title = "Lock the Screen: swaylock";
+      };
+      "Mod+Shift+P" = {
+        action.power-off-monitors = { };
+      };
+      "Mod+M" = {
+        action.quit = { };
+      };
+      "Ctrl+Alt+Delete" = {
+        action.quit = { };
+      };
+      "Mod+Escape" = {
+        action.toggle-keyboard-shortcuts-inhibit = { };
+        allow-inhibiting = false;
+      };
 
       # Запуск приложений
-      "Mod+Return" = { action.spawn = "kitty"; hotkey-overlay.title = "Terminal: kitty"; };
-      "Mod+T" = { action.spawn = "Telegram"; hotkey-overlay.title = "Telegram"; };
-      "Mod+B" = { action.spawn = "librewolf"; hotkey-overlay.title = "LibreWolf"; };
-      "Mod+N" = { action.spawn = [ "kitty" "--app-id" "nvim" "-e" "nvim" ]; hotkey-overlay.title = "Neovim"; };
-      "Mod+X" = { action.spawn = "v2rayN"; hotkey-overlay.title = "V2RayN"; };
-      "Mod+D" = { action.spawn = "code"; hotkey-overlay.title = "VS Code"; };
-      "Mod+E" = { action.spawn = [ "kitty" "--app-id" "yazi" "-e" "yazi" ]; hotkey-overlay.title = "File Manager: Yazi"; };
+      "Mod+Return" = {
+        action.spawn = "kitty";
+        hotkey-overlay.title = "Terminal: kitty";
+      };
+      "Mod+T" = {
+        action.spawn = "Telegram";
+        hotkey-overlay.title = "Telegram";
+      };
+      "Mod+B" = {
+        action.spawn = "librewolf";
+        hotkey-overlay.title = "LibreWolf";
+      };
+      "Mod+N" = {
+        action.spawn = [
+          "kitty"
+          "--app-id"
+          "nvim"
+          "-e"
+          "nvim"
+        ];
+        hotkey-overlay.title = "Neovim";
+      };
+      "Mod+X" = {
+        action.spawn = "v2rayN";
+        hotkey-overlay.title = "V2RayN";
+      };
+      "Mod+D" = {
+        action.spawn = "code";
+        hotkey-overlay.title = "VS Code";
+      };
+      "Mod+E" = {
+        action.spawn = [
+          "kitty"
+          "--app-id"
+          "yazi"
+          "-e"
+          "yazi"
+        ];
+        hotkey-overlay.title = "File Manager: Yazi";
+      };
 
       # Утилиты Noctalia v5 (IPC: `noctalia msg <команда>`)
-      "Mod+Y" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "control-center" ]; hotkey-overlay.title = "Control Center: noctalia control-center"; };
-      "Mod+R" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "launcher" ]; hotkey-overlay.title = "Application Launcher: Noctalia"; };
-      "Mod+V" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "clipboard" ]; hotkey-overlay.title = "Clipboard History: Noctalia"; };
-      "Mod+Shift+V" = { action.spawn = [ "noctalia" "msg" "clipboard-clear" ]; hotkey-overlay.title = "Clipboard Wipe: Noctalia"; };
-      "Mod+Shift+Q" = { action.spawn = [ "noctalia" "msg" "panel-toggle" "session" ]; hotkey-overlay.title = "Session Menu: noctalia session"; };
+      "Mod+Y" = {
+        action.spawn = [
+          "noctalia"
+          "msg"
+          "panel-toggle"
+          "control-center"
+        ];
+        hotkey-overlay.title = "Control Center: noctalia control-center";
+      };
+      "Mod+R" = {
+        action.spawn = [
+          "noctalia"
+          "msg"
+          "panel-toggle"
+          "launcher"
+        ];
+        hotkey-overlay.title = "Application Launcher: Noctalia";
+      };
+      "Mod+V" = {
+        action.spawn = [
+          "noctalia"
+          "msg"
+          "panel-toggle"
+          "clipboard"
+        ];
+        hotkey-overlay.title = "Clipboard History: Noctalia";
+      };
+      "Mod+Shift+V" = {
+        action.spawn = [
+          "noctalia"
+          "msg"
+          "clipboard-clear"
+        ];
+        hotkey-overlay.title = "Clipboard Wipe: Noctalia";
+      };
+      "Mod+Shift+Q" = {
+        action.spawn = [
+          "noctalia"
+          "msg"
+          "panel-toggle"
+          "session"
+        ];
+        hotkey-overlay.title = "Session Menu: noctalia session";
+      };
 
       # Фокус
-      "Mod+H" = { action.focus-column-left = {}; };
-      "Mod+L" = { action.focus-column-right = {}; };
-      "Mod+Home" = { action.focus-column-first = {}; };
-      "Mod+End" = { action.focus-column-last = {}; };
-      "Mod+Ctrl+H" = { action.focus-monitor-left = {}; };
-      "Mod+Ctrl+J" = { action.focus-monitor-down = {}; };
-      "Mod+Ctrl+K" = { action.focus-monitor-up = {}; };
-      "Mod+Ctrl+L" = { action.focus-monitor-right = {}; };
+      "Mod+H" = {
+        action.focus-column-left = { };
+      };
+      "Mod+L" = {
+        action.focus-column-right = { };
+      };
+      "Mod+Home" = {
+        action.focus-column-first = { };
+      };
+      "Mod+End" = {
+        action.focus-column-last = { };
+      };
+      "Mod+Ctrl+H" = {
+        action.focus-monitor-left = { };
+      };
+      "Mod+Ctrl+J" = {
+        action.focus-monitor-down = { };
+      };
+      "Mod+Ctrl+K" = {
+        action.focus-monitor-up = { };
+      };
+      "Mod+Ctrl+L" = {
+        action.focus-monitor-right = { };
+      };
 
       # Перемещение
-      "Mod+Shift+H" = { action.move-column-left = {}; };
-      "Mod+Shift+J" = { action.move-window-down = {}; };
-      "Mod+Shift+K" = { action.move-window-up = {}; };
-      "Mod+Shift+L" = { action.move-column-right = {}; };
-      "Mod+Ctrl+Home" = { action.move-column-to-first = {}; };
-      "Mod+Ctrl+End" = { action.move-column-to-last = {}; };
-      "Mod+Ctrl+Shift+H" = { action.move-column-to-monitor-left = {}; };
-      "Mod+Ctrl+Shift+J" = { action.move-column-to-monitor-down = {}; };
-      "Mod+Ctrl+Shift+K" = { action.move-column-to-monitor-up = {}; };
-      "Mod+Ctrl+Shift+L" = { action.move-column-to-monitor-right = {}; };
+      "Mod+Shift+H" = {
+        action.move-column-left = { };
+      };
+      "Mod+Shift+J" = {
+        action.move-window-down = { };
+      };
+      "Mod+Shift+K" = {
+        action.move-window-up = { };
+      };
+      "Mod+Shift+L" = {
+        action.move-column-right = { };
+      };
+      "Mod+Ctrl+Home" = {
+        action.move-column-to-first = { };
+      };
+      "Mod+Ctrl+End" = {
+        action.move-column-to-last = { };
+      };
+      "Mod+Ctrl+Shift+H" = {
+        action.move-column-to-monitor-left = { };
+      };
+      "Mod+Ctrl+Shift+J" = {
+        action.move-column-to-monitor-down = { };
+      };
+      "Mod+Ctrl+Shift+K" = {
+        action.move-column-to-monitor-up = { };
+      };
+      "Mod+Ctrl+Shift+L" = {
+        action.move-column-to-monitor-right = { };
+      };
 
       # Воркспейсы
-      "Mod+J" = { action.focus-workspace-down = {}; };
-      "Mod+K" = { action.focus-workspace-up = {}; };
-      "Mod+Ctrl+U" = { action.move-column-to-workspace-down = {}; };
-      "Mod+Ctrl+I" = { action.move-column-to-workspace-up = {}; };
-      "Mod+Alt+U" = { action.move-workspace-down = {}; };
-      "Mod+Alt+I" = { action.move-workspace-up = {}; };
-      "Mod+1" = { action.focus-workspace = 1; };
-      "Mod+2" = { action.focus-workspace = 2; };
-      "Mod+3" = { action.focus-workspace = 3; };
-      "Mod+4" = { action.focus-workspace = 4; };
-      "Mod+5" = { action.focus-workspace = 5; };
-      "Mod+6" = { action.focus-workspace = 6; };
-      "Mod+7" = { action.focus-workspace = 7; };
-      "Mod+8" = { action.focus-workspace = 8; };
-      "Mod+9" = { action.focus-workspace = 9; };
-      "Mod+0" = { action.focus-workspace = 10; };
-      "Mod+Shift+1" = { action.move-column-to-workspace = 1; };
-      "Mod+Shift+2" = { action.move-column-to-workspace = 2; };
-      "Mod+Shift+3" = { action.move-column-to-workspace = 3; };
-      "Mod+Shift+4" = { action.move-column-to-workspace = 4; };
-      "Mod+Shift+5" = { action.move-column-to-workspace = 5; };
-      "Mod+Shift+6" = { action.move-column-to-workspace = 6; };
-      "Mod+Shift+7" = { action.move-column-to-workspace = 7; };
-      "Mod+Shift+8" = { action.move-column-to-workspace = 8; };
-      "Mod+Shift+9" = { action.move-column-to-workspace = 9; };
-      "Mod+Shift+0" = { action.move-column-to-workspace = 10; };
-      "Mod+Tab" = { action.focus-workspace-previous = {}; };
+      "Mod+J" = {
+        action.focus-workspace-down = { };
+      };
+      "Mod+K" = {
+        action.focus-workspace-up = { };
+      };
+      "Mod+Ctrl+U" = {
+        action.move-column-to-workspace-down = { };
+      };
+      "Mod+Ctrl+I" = {
+        action.move-column-to-workspace-up = { };
+      };
+      "Mod+Alt+U" = {
+        action.move-workspace-down = { };
+      };
+      "Mod+Alt+I" = {
+        action.move-workspace-up = { };
+      };
+      "Mod+1" = {
+        action.focus-workspace = 1;
+      };
+      "Mod+2" = {
+        action.focus-workspace = 2;
+      };
+      "Mod+3" = {
+        action.focus-workspace = 3;
+      };
+      "Mod+4" = {
+        action.focus-workspace = 4;
+      };
+      "Mod+5" = {
+        action.focus-workspace = 5;
+      };
+      "Mod+6" = {
+        action.focus-workspace = 6;
+      };
+      "Mod+7" = {
+        action.focus-workspace = 7;
+      };
+      "Mod+8" = {
+        action.focus-workspace = 8;
+      };
+      "Mod+9" = {
+        action.focus-workspace = 9;
+      };
+      "Mod+0" = {
+        action.focus-workspace = 10;
+      };
+      "Mod+Shift+1" = {
+        action.move-column-to-workspace = 1;
+      };
+      "Mod+Shift+2" = {
+        action.move-column-to-workspace = 2;
+      };
+      "Mod+Shift+3" = {
+        action.move-column-to-workspace = 3;
+      };
+      "Mod+Shift+4" = {
+        action.move-column-to-workspace = 4;
+      };
+      "Mod+Shift+5" = {
+        action.move-column-to-workspace = 5;
+      };
+      "Mod+Shift+6" = {
+        action.move-column-to-workspace = 6;
+      };
+      "Mod+Shift+7" = {
+        action.move-column-to-workspace = 7;
+      };
+      "Mod+Shift+8" = {
+        action.move-column-to-workspace = 8;
+      };
+      "Mod+Shift+9" = {
+        action.move-column-to-workspace = 9;
+      };
+      "Mod+Shift+0" = {
+        action.move-column-to-workspace = 10;
+      };
+      "Mod+Tab" = {
+        action.focus-workspace-previous = { };
+      };
 
       # Колесо мыши
-      "Mod+WheelScrollDown" = { action.focus-workspace-down = {}; cooldown-ms = 150; };
-      "Mod+WheelScrollUp" = { action.focus-workspace-up = {}; cooldown-ms = 150; };
-      "Mod+Ctrl+WheelScrollDown" = { action.move-column-to-workspace-down = {}; cooldown-ms = 150; };
-      "Mod+Ctrl+WheelScrollUp" = { action.move-column-to-workspace-up = {}; cooldown-ms = 150; };
-      "Mod+WheelScrollRight" = { action.focus-column-right = {}; };
-      "Mod+WheelScrollLeft" = { action.focus-column-left = {}; };
-      "Mod+Ctrl+WheelScrollRight" = { action.move-column-right = {}; };
-      "Mod+Ctrl+WheelScrollLeft" = { action.move-column-left = {}; };
-      "Mod+Shift+WheelScrollDown" = { action.focus-column-right = {}; };
-      "Mod+Shift+WheelScrollUp" = { action.focus-column-left = {}; };
-      "Mod+Ctrl+Shift+WheelScrollDown" = { action.move-column-right = {}; };
-      "Mod+Ctrl+Shift+WheelScrollUp" = { action.move-column-left = {}; };
+      "Mod+WheelScrollDown" = {
+        action.focus-workspace-down = { };
+        cooldown-ms = 150;
+      };
+      "Mod+WheelScrollUp" = {
+        action.focus-workspace-up = { };
+        cooldown-ms = 150;
+      };
+      "Mod+Ctrl+WheelScrollDown" = {
+        action.move-column-to-workspace-down = { };
+        cooldown-ms = 150;
+      };
+      "Mod+Ctrl+WheelScrollUp" = {
+        action.move-column-to-workspace-up = { };
+        cooldown-ms = 150;
+      };
+      "Mod+WheelScrollRight" = {
+        action.focus-column-right = { };
+      };
+      "Mod+WheelScrollLeft" = {
+        action.focus-column-left = { };
+      };
+      "Mod+Ctrl+WheelScrollRight" = {
+        action.move-column-right = { };
+      };
+      "Mod+Ctrl+WheelScrollLeft" = {
+        action.move-column-left = { };
+      };
+      "Mod+Shift+WheelScrollDown" = {
+        action.focus-column-right = { };
+      };
+      "Mod+Shift+WheelScrollUp" = {
+        action.focus-column-left = { };
+      };
+      "Mod+Ctrl+Shift+WheelScrollDown" = {
+        action.move-column-right = { };
+      };
+      "Mod+Ctrl+Shift+WheelScrollUp" = {
+        action.move-column-left = { };
+      };
 
       # Размеры
-      "Mod+Minus" = { action.set-column-width = "-10%"; };
-      "Mod+Equal" = { action.set-column-width = "+10%"; };
-      "Mod+Shift+Minus" = { action.set-window-height = "-10%"; };
-      "Mod+Shift+Equal" = { action.set-window-height = "+10%"; };
-      "Mod+Alt+R" = { action.switch-preset-column-width = {}; };
-      "Mod+Alt+Shift+R" = { action.switch-preset-column-width-back = {}; };
-      "Mod+Ctrl+Alt+Shift+R" = { action.switch-preset-window-height = {}; };
-      "Mod+Ctrl+Alt+R" = { action.reset-window-height = {}; };
+      "Mod+Minus" = {
+        action.set-column-width = "-10%";
+      };
+      "Mod+Equal" = {
+        action.set-column-width = "+10%";
+      };
+      "Mod+Shift+Minus" = {
+        action.set-window-height = "-10%";
+      };
+      "Mod+Shift+Equal" = {
+        action.set-window-height = "+10%";
+      };
+      "Mod+Alt+R" = {
+        action.switch-preset-column-width = { };
+      };
+      "Mod+Alt+Shift+R" = {
+        action.switch-preset-column-width-back = { };
+      };
+      "Mod+Ctrl+Alt+Shift+R" = {
+        action.switch-preset-window-height = { };
+      };
+      "Mod+Ctrl+Alt+R" = {
+        action.reset-window-height = { };
+      };
 
       # Состояния окон
-      "Mod+Q" = { action.close-window = {}; };
-      "Mod+F" = { action.maximize-column = {}; };
-      "Mod+Shift+F" = { action.fullscreen-window = {}; };
-      "Mod+Alt+F" = { action.toggle-window-floating = {}; };
-      "Mod+Shift+M" = { action.maximize-column = {}; };
-      "Mod+Ctrl+F" = { action.expand-column-to-available-width = {}; };
-      "Mod+C" = { action.center-column = {}; };
-      "Mod+Ctrl+C" = { action.center-visible-columns = {}; };
-      "Mod+S" = { action.toggle-overview = {}; repeat = false; };
-      "Mod+Alt+W" = { action.toggle-column-tabbed-display = {}; };
+      "Mod+Q" = {
+        action.close-window = { };
+      };
+      "Mod+F" = {
+        action.maximize-column = { };
+      };
+      "Mod+Shift+F" = {
+        action.fullscreen-window = { };
+      };
+      "Mod+Alt+F" = {
+        action.toggle-window-floating = { };
+      };
+      "Mod+Shift+M" = {
+        action.maximize-column = { };
+      };
+      "Mod+Ctrl+F" = {
+        action.expand-column-to-available-width = { };
+      };
+      "Mod+C" = {
+        action.center-column = { };
+      };
+      "Mod+Ctrl+C" = {
+        action.center-visible-columns = { };
+      };
+      "Mod+S" = {
+        action.toggle-overview = { };
+        repeat = false;
+      };
+      "Mod+Alt+W" = {
+        action.toggle-column-tabbed-display = { };
+      };
 
       # Колонны
-      "Mod+Less" = { action.consume-or-expel-window-left = {}; };
-      "Mod+Greater" = { action.consume-or-expel-window-right = {}; };
-      "Mod+Comma" = { action.consume-window-into-column = {}; };
-      "Mod+Period" = { action.expel-window-from-column = {}; };
+      "Mod+Less" = {
+        action.consume-or-expel-window-left = { };
+      };
+      "Mod+Greater" = {
+        action.consume-or-expel-window-right = { };
+      };
+      "Mod+Comma" = {
+        action.consume-window-into-column = { };
+      };
+      "Mod+Period" = {
+        action.expel-window-from-column = { };
+      };
 
       # Мультимедиа
-      "XF86AudioRaiseVolume" = { allow-when-locked = true; action.spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"; };
-      "XF86AudioLowerVolume" = { allow-when-locked = true; action.spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; };
-      "XF86AudioMute" = { allow-when-locked = true; action.spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; };
-      "XF86AudioMicMute" = { allow-when-locked = true; action.spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; };
-      "XF86AudioPlay" = { allow-when-locked = true; action.spawn-sh = "playerctl play-pause"; };
-      "XF86AudioStop" = { allow-when-locked = true; action.spawn-sh = "playerctl stop"; };
-      "XF86AudioPrev" = { allow-when-locked = true; action.spawn-sh = "playerctl previous"; };
-      "XF86AudioNext" = { allow-when-locked = true; action.spawn-sh = "playerctl next"; };
-      "XF86MonBrightnessUp" = { allow-when-locked = true; action.spawn = [ "brightnessctl" "--class=backlight" "set" "+10%" ]; };
-      "XF86MonBrightnessDown" = { allow-when-locked = true; action.spawn = [ "brightnessctl" "--class=backlight" "set" "10%-" ]; };
+      "XF86AudioRaiseVolume" = {
+        allow-when-locked = true;
+        action.spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+";
+      };
+      "XF86AudioLowerVolume" = {
+        allow-when-locked = true;
+        action.spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-";
+      };
+      "XF86AudioMute" = {
+        allow-when-locked = true;
+        action.spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+      };
+      "XF86AudioMicMute" = {
+        allow-when-locked = true;
+        action.spawn-sh = "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+      };
+      "XF86AudioPlay" = {
+        allow-when-locked = true;
+        action.spawn-sh = "playerctl play-pause";
+      };
+      "XF86AudioStop" = {
+        allow-when-locked = true;
+        action.spawn-sh = "playerctl stop";
+      };
+      "XF86AudioPrev" = {
+        allow-when-locked = true;
+        action.spawn-sh = "playerctl previous";
+      };
+      "XF86AudioNext" = {
+        allow-when-locked = true;
+        action.spawn-sh = "playerctl next";
+      };
+      "XF86MonBrightnessUp" = {
+        allow-when-locked = true;
+        action.spawn = [
+          "brightnessctl"
+          "--class=backlight"
+          "set"
+          "+10%"
+        ];
+      };
+      "XF86MonBrightnessDown" = {
+        allow-when-locked = true;
+        action.spawn = [
+          "brightnessctl"
+          "--class=backlight"
+          "set"
+          "10%-"
+        ];
+      };
 
       # Скриншоты
-      "Print" = { action.screenshot = {}; };
-      "Mod+Print" = { action.spawn-sh = "grim - | wl-copy"; };
-      "Ctrl+Print" = { action.spawn-sh = "grim -g \"$(slurp)\" - | satty --filename - --fullscreen --floating-hack --copy-command wl-copy"; };
+      "Print" = {
+        action.screenshot = { };
+      };
+      "Mod+Print" = {
+        action.spawn-sh = "grim - | wl-copy";
+      };
+      "Ctrl+Print" = {
+        action.spawn-sh = "grim -g \"$(slurp)\" - | satty --filename - --fullscreen --floating-hack --copy-command wl-copy";
+      };
     };
 
     # === ПРАВИЛА ОКОН ===
     window-rules = [
       # Скругленные углы для всех окон
       {
-        geometry-corner-radius = let r = 15.0; in {
-          top-left = r;
-          top-right = r;
-          bottom-left = r;
-          bottom-right = r;
-        };
+        geometry-corner-radius =
+          let
+            r = 15.0;
+          in
+          {
+            top-left = r;
+            top-right = r;
+            bottom-left = r;
+            bottom-right = r;
+          };
         clip-to-geometry = true;
       }
       # PiP для LibreWolf
       {
-        matches = [ { app-id = "^librewolf$"; title = "^Picture-in-Picture$"; } ];
+        matches = [
+          {
+            app-id = "^librewolf$";
+            title = "^Picture-in-Picture$";
+          }
+        ];
         open-floating = true;
       }
       # Портал выбора файлов (LibreWolf)
       {
         matches = [ { app-id = "^file_chooser$"; } ];
         open-floating = true;
-        default-column-width = { fixed = 800; };
-        default-window-height = { fixed = 600; };
+        default-column-width = {
+          fixed = 800;
+        };
+        default-window-height = {
+          fixed = 600;
+        };
       }
       # Yazi
       {
@@ -277,18 +615,47 @@
         open-floating = false;
       }
       # Воркспейсы
-      { matches = [ { app-id = "v2rayN"; } ]; open-on-workspace = "main"; }
-      { matches = [ { app-id = "Telegram"; } ]; open-on-workspace = "main"; }
-      { matches = [ { app-id = "librewolf"; } ]; open-on-workspace = "two"; }
-      { matches = [ { app-id = "kitty"; } ]; open-on-workspace = "two"; }
+      {
+        matches = [ { app-id = "v2rayN"; } ];
+        open-on-workspace = "main";
+      }
+      {
+        matches = [ { app-id = "Telegram"; } ];
+        open-on-workspace = "main";
+      }
+      {
+        matches = [ { app-id = "librewolf"; } ];
+        open-on-workspace = "two";
+      }
+      {
+        matches = [ { app-id = "kitty"; } ];
+        open-on-workspace = "two";
+      }
       # { matches = [ { app-id = "nvim"; } ]; open-on-workspace = "two"; }
       # Окно настроек Noctalia v5 — плавающее, фиксированный размер
       {
         matches = [ { app-id = "^dev\\.noctalia\\.Noctalia$"; } ];
         open-floating = true;
-        default-column-width = { fixed = 1080; };
-        default-window-height = { fixed = 920; };
+        default-column-width = {
+          fixed = 1080;
+        };
+        default-window-height = {
+          fixed = 920;
+        };
       }
     ];
   };
+
+  # Noctalia применяет тему к Niri, дописывая `include "noctalia.kdl"` в
+  # ~/.config/niri/config.kdl. Этот файл — симлинк Home Manager в Nix store
+  # (read-only), поэтому дописать его нельзя, и тема не подключалась.
+  # Включаем include декларативно: в конце конфига (чтобы тема Noctalia
+  # переопределяла наши базовые цвета, как делал бы apply.sh) и как optional,
+  # чтобы niri стартовал ещё до того, как Noctalia создаст noctalia.kdl.
+  xdg.configFile.niri-config.source = lib.mkForce (
+    pkgs.writeText "niri-config.kdl" ''
+      ${config.programs.niri.finalConfig}
+      include optional=true "noctalia.kdl"
+    ''
+  );
 }

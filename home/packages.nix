@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -7,10 +7,17 @@
     btop
     fastfetch
     #zsh (установка через home-manager)
-    
+
     # Инструменты разработки (нужны для nvim-treesitter и lazy.nvim)
     neovim
-    (ansible.override { extraPackages = ps: with ps; [ boto3 docker kubernetes ]; })
+    (ansible.override {
+      extraPackages =
+        ps: with ps; [
+          boto3
+          docker
+          kubernetes
+        ];
+    })
     gcc
     gnumake
     unzip
@@ -19,7 +26,7 @@
     # Браузер
     #librewolf (установка через home-manager)
     qbittorrent
-    
+
     # V2rayN и ядра
     v2rayn
     xray
@@ -27,7 +34,7 @@
 
     # Мессенджеры
     telegram-desktop
-    spotify 
+    spotify
     steam
   ];
 }

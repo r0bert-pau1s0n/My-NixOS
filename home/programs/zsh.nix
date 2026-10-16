@@ -9,7 +9,12 @@
     oh-my-zsh = {
       enable = true;
       theme = "robbyrussell";
-      plugins = [ "git" "sudo" "colored-man-pages" "command-not-found" ];
+      plugins = [
+        "git"
+        "sudo"
+        "colored-man-pages"
+        "command-not-found"
+      ];
     };
 
     plugins = [

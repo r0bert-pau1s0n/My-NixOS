@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ config, ... }:
 
 let
   allowedDomains = [
@@ -44,7 +44,14 @@ in
 
       SearchEngines = {
         Default = "DuckDuckGo";
-        Remove = [ "Google" "Bing" "Amazon.com" "eBay" "Twitter" "Perplexity" ];
+        Remove = [
+          "Google"
+          "Bing"
+          "Amazon.com"
+          "eBay"
+          "Twitter"
+          "Perplexity"
+        ];
       };
 
       ExtensionSettings = {
@@ -78,41 +85,165 @@ in
       Cookies = {
         Default = true;
         Allow = allowedDomains;
-        Block = [];
+        Block = [ ];
       };
 
       Bookmarks = [
-        { Title = ""; URL = "https://rutracker.org/forum/index.php?addon_rnd=0.26349277671516336"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://yandex.ru/maps/50/perm/?ll=56.229441%2C58.010454&z=12"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://mail.google.com/mail/u/0/#inbox"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://proton.me/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.youtube.com/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.twitch.tv/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://play.qobuz.com/discover"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.ozon.ru/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.avito.ru/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://aliexpress.ru/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.lamoda.ru/women-home/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://lesta.ru/ru"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://store.steampowered.com/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://cybershoke.net/cs2/servers/dm/ru-moscow"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://pixstorm.ru/ru"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://store.epicgames.com/ru/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://chatgpt.com/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://chat.z.ai/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://grok.com/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://chat.deepseek.com/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://github.com/r0bert-pau1s0n"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://hub.docker.com/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://translate.yandex.ru/translator/%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9-%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.deepl.com/ru/translator"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://discord.com/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://x.com/i/grok?conversation=1892935018915176636"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.gosuslugi.ru/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://app.medtochka.ru/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://lkfl2.nalog.ru/"; Placement = "toolbar"; }
-        { Title = ""; URL = "https://www.tbank.ru/mybank/"; Placement = "toolbar"; }
-        { Title = ""; URL = "http://192.168.0.1/"; Placement = "toolbar"; }
+        {
+          Title = "";
+          URL = "https://rutracker.org/forum/index.php?addon_rnd=0.26349277671516336";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://yandex.ru/maps/50/perm/?ll=56.229441%2C58.010454&z=12";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://mail.google.com/mail/u/0/#inbox";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://proton.me/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.youtube.com/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.twitch.tv/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://play.qobuz.com/discover";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.ozon.ru/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.avito.ru/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://aliexpress.ru/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.lamoda.ru/women-home/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://lesta.ru/ru";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://store.steampowered.com/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://cybershoke.net/cs2/servers/dm/ru-moscow";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://pixstorm.ru/ru";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://store.epicgames.com/ru/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://chatgpt.com/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://chat.z.ai/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://grok.com/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://chat.deepseek.com/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://github.com/r0bert-pau1s0n";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://hub.docker.com/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://translate.yandex.ru/translator/%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9-%D0%A0%D1%83%D1%81%D1%81%D0%BA%D0%B8%D0%B9";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.deepl.com/ru/translator";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://discord.com/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://x.com/i/grok?conversation=1892935018915176636";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.gosuslugi.ru/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://app.medtochka.ru/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://lkfl2.nalog.ru/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "https://www.tbank.ru/mybank/";
+          Placement = "toolbar";
+        }
+        {
+          Title = "";
+          URL = "http://192.168.0.1/";
+          Placement = "toolbar";
+        }
       ];
     };
 

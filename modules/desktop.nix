@@ -14,12 +14,15 @@
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
       xdg-desktop-portal-gnome
-      xdg-desktop-portal-termfilechooser  # Терминальный выбор файлов
+      xdg-desktop-portal-termfilechooser # Терминальный выбор файлов
     ];
 
     config = {
       common = {
-        default = [ "gtk" "gnome" ];
+        default = [
+          "gtk"
+          "gnome"
+        ];
         "org.freedesktop.impl.portal.FileChooser" = [ "termfilechooser" ];
       };
     };

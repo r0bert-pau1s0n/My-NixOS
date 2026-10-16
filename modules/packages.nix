@@ -15,7 +15,7 @@
     # Сеть и Bluetooth
     bluez
     openssh
-    
+
     # Wayland компоненты
     xwayland-satellite # Для запуска X11 приложений в Niri
     wl-clipboard

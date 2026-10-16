@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   programs.kitty = {
@@ -16,7 +16,7 @@
       cursor_shape = "beam";
       cursor_trail = "1";
       window_padding_width = "5 10 2";
-      
+
       # Графика
       enable_graphics = "yes";
     };
