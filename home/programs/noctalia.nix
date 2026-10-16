@@ -80,8 +80,12 @@
       # (include в kitty.conf), но штатный templates/kitty/apply.sh падает на
       # read-only store-симлинке kitty.conf и не доходит до pkill -USR1.
       # Поэтому шлём kitty сигнал перезагрузки конфига сами: открытые окна
-      # перекрашиваются без перезапуска. `|| true` — если kitty не запущен.
-      hooks.colors_changed = [ "${pkgs.procps}/bin/pkill -USR1 -x kitty || true" ];
+      # перекрашиваются без перезапуска (kitty.apply_new_options обновляет
+      # цвета и делает refresh). NixOS-обёртка kitty называется `.kitty-wrapped`,
+      # поэтому пробуем оба имени процесса; `|| true` — если kitty не запущен.
+      hooks.colors_changed = [
+        "${pkgs.procps}/bin/pkill -USR1 -x '.kitty-wrapped' || ${pkgs.procps}/bin/pkill -USR1 -x kitty || true"
+      ];
     };
   };
 
