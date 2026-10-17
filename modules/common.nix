@@ -30,5 +30,12 @@
     # Система единая (см. flake.nix: `system = "x86_64-linux"`); ссылаться на
     # final.system/prev.system здесь нельзя — получится infinite recursion.
     inputs.portproton.overlays.x86_64-linux.default
+    # PortProton GUI — это yad_gui_pp (GTK3), а в FHS steam-run GTK3 нет,
+    # поэтому GUI не запускается. Подставляем steam-run, собранный с gtk3.
+    (final: prev: {
+      portproton = prev.portproton.override {
+        steam-run = (prev.steam.override { extraPkgs = p: [ p.gtk3 ]; }).run;
+      };
+    })
   ];
 }
