@@ -37,5 +37,7 @@
     spotify
     # Steam с Millennium (overlay в modules/common.nix) — для темы Noctalia
     millennium-steam
+    # Запуск Windows-игр вне Steam (overlay в modules/common.nix)
+    portproton
   ];
 }

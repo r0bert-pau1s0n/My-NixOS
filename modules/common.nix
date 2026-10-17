@@ -25,5 +25,10 @@
     inputs.niri-flake.overlays.niri
     # pkgs.millennium / pkgs.millennium-steam (Steam + Millennium)
     inputs.millennium.overlays.default
+    # pkgs.portproton (launcher Wine/Proton).
+    # ВАЖНО: flake-utils вложил оверлеи по системе (overlays.<system>.default).
+    # Система единая (см. flake.nix: `system = "x86_64-linux"`); ссылаться на
+    # final.system/prev.system здесь нельзя — получится infinite recursion.
+    inputs.portproton.overlays.x86_64-linux.default
   ];
 }

@@ -24,6 +24,14 @@
       url = "github:SteamClientHomebrew/Millennium?dir=packages/nix";
     };
 
+    # PortProton — launcher/менеджер Wine/Proton-префиксов для Windows-игр.
+    # Нативный Nix-пакет (upstream: Castro-Fidel/PortProton_ALT).
+    # inputs.nixpkgs.follows — reuse нашей nixpkgs (steam-run и т.д.).
+    portproton = {
+      url = "github:Redm00use/PortProton-NixOS";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Home Manager — ветка master для совместимости с unstable
     home-manager = {
       url = "github:nix-community/home-manager/master";
