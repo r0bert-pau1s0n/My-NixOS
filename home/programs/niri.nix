@@ -614,21 +614,45 @@
         matches = [ { app-id = "yazi"; } ];
         open-floating = false;
       }
-      # Воркспейсы
+      # Воркспейсы при старте сессии.
+      # at-startup=true ограничивает правило первыми 60 c после запуска niri,
+      # поэтому после старта новые окна открываются на текущем воркспейсе.
+      # app-id и at-startup задаются в ОДНОМ match-объекте (в KDL это `match`
+      # с двумя условиями = AND); отдельные объекты дали бы OR.
       {
-        matches = [ { app-id = "v2rayN"; } ];
+        matches = [
+          {
+            app-id = "v2rayN";
+            at-startup = true;
+          }
+        ];
         open-on-workspace = "main";
       }
       {
-        matches = [ { app-id = "^org\\.telegram\\.desktop$"; } ];
+        matches = [
+          {
+            app-id = "^org\\.telegram\\.desktop$";
+            at-startup = true;
+          }
+        ];
         open-on-workspace = "main";
       }
       {
-        matches = [ { app-id = "librewolf"; } ];
+        matches = [
+          {
+            app-id = "librewolf";
+            at-startup = true;
+          }
+        ];
         open-on-workspace = "two";
       }
       {
-        matches = [ { app-id = "kitty"; } ];
+        matches = [
+          {
+            app-id = "kitty";
+            at-startup = true;
+          }
+        ];
         open-on-workspace = "two";
       }
       # { matches = [ { app-id = "nvim"; } ]; open-on-workspace = "two"; }
