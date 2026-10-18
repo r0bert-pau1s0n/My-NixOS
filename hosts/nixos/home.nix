@@ -16,9 +16,11 @@
       }
       { command = [ "xwayland-satellite" ]; }
       { command = [ "noctalia" ]; }
-      # Приложения рабочего стола намеренно НЕ запускаются автоматически:
-      # v2rayN, Telegram, librewolf, kitty запускаются вручную
-      # (Mod+X / Mod+T / Mod+B / Mod+Return).
+      # v2rayN и Telegram открываются на `main` — первом (стартовом)
+      # воркспейсе niri: других правил автозапуска нет, поэтому окна
+      # остаются на активном при старте воркспейсе.
+      { command = [ "v2rayN" ]; }
+      { command = [ "Telegram" ]; }
     ];
 
     outputs."DP-3" = {
