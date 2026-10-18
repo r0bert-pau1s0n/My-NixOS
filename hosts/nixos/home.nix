@@ -16,23 +16,9 @@
       }
       { command = [ "xwayland-satellite" ]; }
       { command = [ "noctalia" ]; }
-      { command = [ "v2rayN" ]; }
-      {
-        command = [
-          "sh"
-          "-c"
-          "sleep 2 && Telegram"
-        ];
-      }
-      { command = [ "librewolf" ]; }
-      {
-        command = [
-          "sh"
-          "-c"
-          "sleep 2 && kitty --app-id startup-kitty"
-        ];
-      }
-      # { command = [ "sh" "-c" "sleep 2 && kitty --app-id nvim -e nvim" ]; }
+      # Приложения рабочего стола намеренно НЕ запускаются автоматически:
+      # v2rayN, Telegram, librewolf, kitty запускаются вручную
+      # (Mod+X / Mod+T / Mod+B / Mod+Return).
     ];
 
     outputs."DP-3" = {

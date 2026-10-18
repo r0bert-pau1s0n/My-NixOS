@@ -614,43 +614,6 @@
         matches = [ { app-id = "yazi"; } ];
         open-floating = false;
       }
-      # Размещение приложений на старте сессии.
-      # v2rayN и Telegram запускаются на `main` — это первый (стартовый)
-      # воркспейс niri, поэтому правил для них не нужно: при старте они и так
-      # откроются на `main`, а ручной запуск (Mod+X / Mod+T) попадёт на текущий
-      # воркспейс даже в первые 60 c.
-      # librewolf и kitty должны стартовать на `two`, для этого нужны окна-
-      # правила с open-on-workspace. ВАЖНО: окно, открываемое через
-      # open-on-workspace на текущем выходе, niri автофокусирует, а фокус
-      # активирует целевой воркспейс — тогда rule-less v2rayN/Telegram следом
-      # «прилипли» бы к `two`. Поэтому обоим правилам добавлен open-focused=false:
-      # окна по-прежнему уходят на `two`, но не активируют его, и стартовый
-      # `main` остаётся активным.
-      # at-startup=true ограничивает правило первыми 60 c (app-id и at-startup
-      # в ОДНОМ match-объекте = AND; отдельные объекты дали бы OR):
-      #   * kitty — отдельный процесс на окно, поэтому автозапуску выдан свой
-      #     app-id (startup-kitty): ручной Mod+Return не попадёт под правило
-      #     даже в стартовое окно;
-      #   * librewolf (Firefox) — одноэкземплярный: окна, запрошенные позже,
-      #     наследуют app-id уже запущенного процесса, поэтому отдельный app-id
-      #     невозможен и правило остаётся с at-startup (ручной Mod+B в первые
-      #     60 c после входа попадёт на `two`).
-      {
-        matches = [
-          {
-            app-id = "librewolf";
-            at-startup = true;
-          }
-        ];
-        open-on-workspace = "two";
-        open-focused = false;
-      }
-      {
-        matches = [ { app-id = "startup-kitty"; } ];
-        open-on-workspace = "two";
-        open-focused = false;
-      }
-      # { matches = [ { app-id = "nvim"; } ]; open-on-workspace = "two"; }
       # Окно настроек Noctalia v5 — плавающее, фиксированный размер
       {
         matches = [ { app-id = "^dev\\.noctalia\\.Noctalia$"; } ];
