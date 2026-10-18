@@ -29,7 +29,7 @@
         command = [
           "sh"
           "-c"
-          "sleep 2 && kitty"
+          "sleep 2 && kitty --app-id startup-kitty"
         ];
       }
       # { command = [ "sh" "-c" "sleep 2 && kitty --app-id nvim -e nvim" ]; }

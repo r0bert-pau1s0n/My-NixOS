@@ -619,6 +619,9 @@
       # поэтому после старта новые окна открываются на текущем воркспейсе.
       # app-id и at-startup задаются в ОДНОМ match-объекте (в KDL это `match`
       # с двумя условиями = AND); отдельные объекты дали бы OR.
+      # ВАЖНО: пока идёт стартовое окно (60 c), ручной запуск тех же программ
+      # тоже подпадёт под правило. Поэтому у kitty (частый Mod+Return)
+      # используется отдельный app-id автозапуска вместо at-startup.
       {
         matches = [
           {
@@ -647,12 +650,7 @@
         open-on-workspace = "two";
       }
       {
-        matches = [
-          {
-            app-id = "kitty";
-            at-startup = true;
-          }
-        ];
+        matches = [ { app-id = "startup-kitty"; } ];
         open-on-workspace = "two";
       }
       # { matches = [ { app-id = "nvim"; } ]; open-on-workspace = "two"; }
