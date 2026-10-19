@@ -116,9 +116,17 @@
       # broadcast всем инстансам) — каждый запущенный yazi перечитывает flavor
       # с диска вживую, сохраняя точные цвета Noctalia. `|| true` — если yazi
       # не запущен (нет DDS-сервера).
+      #
+      # opencode: шаблон перезаписывает themes/matugen.json, но OpenCode 1.19
+      # не следит за файлами — он перечитывает кастомные темы только по SIGUSR2
+      # (ThemeProvider -> subscribeRefresh). Команда процесса обрезана ядром до
+      # 15 символов, поэтому имя `.opencode-wrapped` видно как `.opencode-wrapp`.
+      # `|| true` — если opencode не запущен; SIGUSR2 — дизайнерский сигнал
+      # OpenCode для перечитывания тем, сессия при этом сохраняется.
       hooks.colors_changed = [
         "${pkgs.procps}/bin/pkill -USR1 -x '.kitty-wrapped' || ${pkgs.procps}/bin/pkill -USR1 -x kitty || true"
         "${pkgs.yazi}/bin/ya emit-to 0 app:theme || true"
+        "${pkgs.procps}/bin/pkill -USR2 -x '.opencode-wrapp' || true"
       ];
     };
   };
