@@ -205,6 +205,18 @@
         ];
         hotkey-overlay.title = "File Manager: Yazi";
       };
+      "Mod+Shift+S" = {
+        action.spawn = "steam";
+        hotkey-overlay.title = "Steam";
+      };
+      "Mod+Shift+D" = {
+        action.spawn = "vesktop";
+        hotkey-overlay.title = "Vesktop (Discord)";
+      };
+      "Mod+Shift+G" = {
+        action.spawn = "portproton";
+        hotkey-overlay.title = "PortProton";
+      };
 
       # Утилиты Noctalia v5 (IPC: `noctalia msg <команда>`)
       "Mod+Y" = {

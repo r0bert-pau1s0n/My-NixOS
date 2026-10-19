@@ -6,6 +6,25 @@
   ...
 }:
 
+let
+  # Классические GTK3-приложения (yad, а значит и GUI PortProton) читают
+  # устаревшие имена цветов theme_*, а штатный шаблон gtk3 задаёт только
+  # «новые» (window_bg_color и т.п.), поэтому такие приложения получают
+  # дефолтные цвета Adwaita. Задаём алиасы (noctalia-gtk3-classic.css) и
+  # подключаем их в gtk.css, который создаёт gtk-refresh.py Noctalia (при
+  # наличии импорта noctalia.css он файл не перезаписывает, поэтому наш
+  # import живёт). Пути абсолютные: рендерер Noctalia раскрывает только `~`.
+  gtk3ClassicTemplate = {
+    input_path = ./noctalia-gtk3-classic.css;
+    output_path = "${config.xdg.configHome}/gtk-3.0/noctalia-gtk3-classic.css";
+    hook_async = false;
+    post_hook = ''
+      css="${config.xdg.configHome}/gtk-3.0/gtk.css"
+      line='@import url("noctalia-gtk3-classic.css");'
+      ${pkgs.gnugrep}/bin/grep -qF "$line" "$css" 2>/dev/null || printf '%s\n' "$line" >> "$css"
+    '';
+  };
+in
 {
   # Официальный Home Manager-модуль Noctalia v5.
   # Он сам ставит пакет `noctalia`, генерирует ~/.config/noctalia/config.toml
@@ -45,6 +64,9 @@
             "steam"
             "yazi"
           ];
+
+          # Классические GTK3-приложения — см. gtk3ClassicTemplate выше.
+          user."gtk3-classic" = gtk3ClassicTemplate;
         };
       };
 
