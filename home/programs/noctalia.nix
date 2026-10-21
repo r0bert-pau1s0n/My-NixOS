@@ -27,97 +27,48 @@ let
 in
 {
   # Официальный Home Manager-модуль Noctalia v5.
-  # Он сам ставит пакет `noctalia`, генерирует ~/.config/noctalia/config.toml
-  # и на этапе сборки прогоняет `noctalia config validate` (checkConfig).
+  # Он ставит пакет, генерирует ~/.config/noctalia/config.toml и проверяет его.
+  #
+  # Конфигурация разделена:
+  #   1. config.toml (этот файл) — структурные значения: templates/hooks с
+  #      store-путями, каталог обоев и privacy-флаги.
+  #   2. home/noctalia/settings.toml — GUI-настройки. Activation создаёт
+  #      прямой симлинк из ~/.local/state/noctalia/settings.toml на этот файл,
+  #      Noctalia пишет сквозь него, а изменения сразу видны в git diff.
+  #   3. ~/.config/noctalia/host.toml — host-specific мониторы/lockscreen.
   imports = [ inputs.noctalia.homeModules.default ];
 
   programs.noctalia = {
     enable = true;
 
+    # Оформление, панель, виджеты и прочие GUI-настройки живут в
+    # home/noctalia/settings.toml и пишутся туда самим Noctalia. Здесь
+    # остаются только структурные значения, которые нельзя хранить в
+    # GUI-файле: store-пути шаблонов и хуков, каталог обоев, privacy-флаги.
     settings = {
-      # ── Тема ──────────────────────────────────────────────────────────
-      theme = {
-        mode = "dark";
-        shell_mode = "follow";
-        source = "wallpaper";
-        wallpaper_scheme = "m3-tonal-spot";
-        sync_color_scheme = true;
-
-        # Декларативный список шаблонов (зеркалит runtime settings.toml).
-        # pywalfox: Noctalia генерирует ~/.cache/wal/colors.json и ставит
-        # native messaging host для расширения Pywalfox (см. миграцию ниже).
-        templates = {
-          enable_community_templates = true;
-          builtin_ids = [
-            "btop"
-            "gtk3"
-            "kitty"
-            "niri"
-            "qt"
-          ];
-          community_ids = [
-            "opencode"
-            "pywalfox"
-            "discord"
-            "telegram"
-            "neovim"
-            "steam"
-            "yazi"
-          ];
-
-          # Классические GTK3-приложения — см. gtk3ClassicTemplate выше.
-          user."gtk3-classic" = gtk3ClassicTemplate;
-        };
-      };
-
-      # ── Оболочка ──────────────────────────────────────────────────────
-      shell = {
-        font_family = "JetBrainsMono Nerd Font Mono";
-        lang = "en";
-        telemetry_enabled = false;
-        setup_wizard_enabled = false;
-        animation.enabled = false;
-        screen_corners.enabled = true;
-      };
-
-      # ── Панель ────────────────────────────────────────────────────────
-      bar.default = {
-        position = "top";
-        thickness = 34;
-        margin_ends = 4;
-        margin_edge = 4;
-        radius = 12;
-        background_opacity = 1.0;
-        widget_spacing = 6;
-        start = [
-          "workspaces"
-          "active-window"
-          "audio-visualizer"
+      # pywalfox: Noctalia генерирует ~/.cache/wal/colors.json и ставит
+      # native messaging host для расширения Pywalfox (см. миграцию ниже).
+      theme.templates = {
+        enable_community_templates = true;
+        builtin_ids = [
+          "btop"
+          "gtk3"
+          "kitty"
+          "niri"
+          "qt"
         ];
-        center = [ "clock" ];
-        end = [
-          "sysmon"
-          "volume"
-          "bluetooth"
-          "notifications"
-          "clipboard"
-          "battery"
-          "keyboard-layout"
-          "taskbar"
-          "control-center"
+        community_ids = [
+          "opencode"
+          "pywalfox"
+          "discord"
+          "telegram"
+          "neovim"
+          "steam"
+          "yazi"
         ];
-      };
 
-      # ── Обои ──────────────────────────────────────────────────────────
-      wallpaper = {
-        enabled = true;
-        directory = "${config.xdg.configHome}/wallpapers";
-      };
-
-      # ── Локация/погода ────────────────────────────────────────────────
-      location = {
-        auto_locate = false;
-        address = "Perm";
+        # Классические GTK3-приложения — см. gtk3ClassicTemplate выше.
+        user."gtk3-classic" = gtk3ClassicTemplate;
       };
 
       # ── Хуки ──────────────────────────────────────────────────────────
@@ -150,8 +101,68 @@ in
         "${pkgs.yazi}/bin/ya emit-to 0 app:theme || true"
         "${pkgs.procps}/bin/pkill -USR2 -x '.opencode-wrapp' || true"
       ];
+
+      wallpaper = {
+        enabled = true;
+        directory = "${config.xdg.configHome}/wallpapers";
+      };
+
+      shell = {
+        telemetry_enabled = false;
+        setup_wizard_enabled = false;
+      };
     };
   };
+
+  # GUI-настройки Noctalia пишутся в ~/.local/state/noctalia/settings.toml.
+  # Держим этот файл прямым симлинком на файл в Git-репозитории: Noctalia
+  # пишет атомарно сквозь симлинк, поэтому изменения из GUI сразу видны в
+  # git diff. Ссылку создаём сами после linkGeneration, чтобы не зависеть от
+  # xdg.stateFile/force и не проходить через промежуточный store-симлинк.
+  home.activation.noctaliaSettingsLink = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    target="${config.xdg.stateHome}/noctalia/settings.toml"
+    repo="${config.home.homeDirectory}/nix/home/noctalia/settings.toml"
+
+    [ -f "$repo" ] || { echo "Noctalia settings file is missing: $repo"; exit 1; }
+
+    $DRY_RUN_CMD mkdir -p -- "$(dirname -- "$target")" || exit 1
+
+    if [ -L "$target" ] && [ "$(readlink "$target")" = "$repo" ]; then
+      :
+    elif [ -L "$target" ] && [ "$(readlink -f -- "$target")" = "$(readlink -f -- "$repo")" ]; then
+      $DRY_RUN_CMD ln -sfn -- "$repo" "$target" || exit 1
+    elif [ -d "$target" ] && [ ! -L "$target" ]; then
+      echo "Refusing to replace directory with Noctalia settings symlink: $target"
+      exit 1
+    else
+      if [ -e "$target" ] || [ -L "$target" ]; then
+        backup="$target.bak-$(date +%Y%m%d-%H%M%S)"
+        [ -e "$backup" ] || [ -L "$backup" ] && backup="$backup-$$"
+        $DRY_RUN_CMD mv -- "$target" "$backup" || exit 1
+      fi
+      $DRY_RUN_CMD ln -s -- "$repo" "$target" || exit 1
+    fi
+
+    if [ -z "''${DRY_RUN:-}" ]; then
+      NOCTALIA_CONFIG_HOME="${config.xdg.configHome}" \
+      NOCTALIA_STATE_HOME="${config.xdg.stateHome}" \
+        ${lib.getExe config.programs.noctalia.package} config validate
+    fi
+  '';
+
+  # Старое имя host-слоя: убираем 90-host.toml в backup, чтобы в config-каталоге
+  # не оставался устаревший файл, который загружается раньше config.toml.
+  home.activation.noctaliaHostLayerMigration =
+    lib.hm.dag.entryBetween [ "linkGeneration" ] [ "writeBoundary" ]
+      ''
+        legacy="${config.xdg.configHome}/noctalia/90-host.toml"
+
+        if [ -e "$legacy" ] || [ -L "$legacy" ]; then
+          backup="$legacy.bak-$(date +%Y%m%d-%H%M%S)"
+          [ -e "$backup" ] || [ -L "$backup" ] && backup="$backup-$$"
+          $DRY_RUN_CMD mv -- "$legacy" "$backup" || exit 1
+        fi
+      '';
 
   # Pywalfox: от v4 остался «чужой» native messaging manifest, указывающий на
   # несуществующий store-путь pywalfox-native 2.9.0. Noctalia (firefox-theme)
@@ -172,7 +183,7 @@ in
   home.activation.cleanupNiriConfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     FILE="${config.xdg.configHome}/niri/config.kdl"
     if [ -e "$FILE" ] && [ ! -L "$FILE" ]; then
-      rm -f "$FILE"
+      $DRY_RUN_CMD rm -f -- "$FILE" || exit 1
     fi
   '';
 }

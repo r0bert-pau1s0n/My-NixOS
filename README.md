@@ -59,6 +59,74 @@ sudo nixos-rebuild test --flake ~/nix#nixos
 sudo nixos-rebuild boot --flake ~/nix#nixos
 ```
 
+## Noctalia: настройки из GUI в Git
+
+Noctalia собирает настройки из трёх слоёв в порядке загрузки:
+
+- `~/.config/noctalia/config.toml` — декларативный слой Home Manager
+  (`home/programs/noctalia.nix`): шаблоны с store-путями, хуки, каталог обоев и
+  privacy-флаги;
+- `~/.config/noctalia/host.toml` — host-specific мониторы, lockscreen и обои;
+- `~/.local/state/noctalia/settings.toml` — слой, в который Noctalia пишет
+  изменения из GUI. Загружается последним и перекрывает остальные слои.
+
+В этом репозитории `settings.toml` — **отслеживаемый Git-файл**:
+
+```
+home/noctalia/settings.toml          источник истины
+        ▲
+        │ Noctalia пишет атомарно сквозь симлинк
+~/.local/state/noctalia/settings.toml
+```
+
+Activation после `linkGeneration` создаёт прямой симлинк из state-каталога на
+`~/nix/home/noctalia/settings.toml`. Повторные переключения идемпотентны:
+правильная ссылка не трогается, старый двухступенчатый симлинк через
+`/nix/store` заменяется прямым, а чужой файл или симлинк уходит в
+`settings.toml.bak-<timestamp>`. Каталог на месте `settings.toml` не
+заменяется — activation останавливается с ошибкой. После создания ссылки
+объединённый config проверяется через `noctalia config validate`; в dry-run
+проверка пропускается. Поэтому после изменения настроек в GUI достаточно
+проверить и закоммитить diff:
+
+```bash
+git status
+git diff
+git add home/noctalia/settings.toml
+git commit -m "Update Noctalia settings"
+```
+
+Repo должен быть клонирован именно в `~/nix`: путь к `settings.toml` зашит в
+`home/programs/noctalia.nix`. При первом переключении существующий
+`settings.toml` автоматически перемещается в
+`settings.toml.bak-<timestamp>`; если миграция не удалась, activation
+останавливается.
+
+Host-specific настройки (мониторы, раскладка lockscreen) лежат в
+`hosts/<host>/host.toml` и устанавливаются как
+`~/.config/noctalia/host.toml`. На новой машине создайте свой файл с её
+connector'ом или уберите строку `xdg.configFile."noctalia/host.toml"` из
+`hosts/<host>/home.nix`. Устаревший `~/.config/noctalia/90-host.toml` при
+первом переключении автоматически перемещается в
+`90-host.toml.bak-<timestamp>`.
+
+Ограничения:
+
+- `settings.toml` не попадает в Nix store, поэтому его содержимое проверяется
+  при activation (`noctalia config validate`), а не при сборке.
+- Community-палитра `Alpenglow` и community-шаблоны скачиваются при первом
+  запуске. Без интернета Noctalia временно использует встроенную палитру.
+- Пути обоев записаны через `~` и раскрываются Noctalia при чтении. Если
+  выбрать обои через GUI, Noctalia может снова записать абсолютный путь.
+- Правки per-monitor ключей через GUI попадут в общий `settings.toml`. Чтобы
+  они оставались только на этом хосте, переносите их в
+  `hosts/<host>/host.toml` вручную.
+- После первого переключения со старой установки может понадобиться
+  перезапустить Noctalia или сессию: старый процесс держит host-specific
+  overrides (например, раскладку lockscreen) в памяти и может записать их
+  обратно при следующем изменении. После перезапуска host-файл работает как
+  ожидается.
+
 ## Проверки качества
 
 ```bash
@@ -132,7 +200,10 @@ Home Manager откатывается вместе с системой (он с�
    - `nvidia.nix` — нужен только если на новой машине GPU NVIDIA (иначе
      подключение этого модуля убрать);
    - `home.nix` — host-специфичная пользовательская среда (мониторы,
-     автозапуск приложений и т.п.).
+     автозапуск приложений и т.п.);
+   - `host.toml` — host-specific Noctalia (мониторы, lockscreen);
+     если файла нет, уберите соответствующую строку
+     `xdg.configFile."noctalia/host.toml"` из `home.nix`.
 
 5. Проверить `default.nix` нового хоста: он должен импортировать общие
    `modules/*` и `home/`, подключать Home Manager и указывать правильные

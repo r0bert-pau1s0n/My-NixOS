@@ -1,6 +1,10 @@
 { ... }:
 
 {
+  # Host-specific Noctalia settings (monitor wallpaper and lockscreen layout).
+  # Loaded as a config-directory layer; GUI settings in settings.toml still win.
+  xdg.configFile."noctalia/host.toml".source = ./host.toml;
+
   # Host-специфичные настройки рабочей среды для машины `nixos`
   # (монитор и автозапуск приложений рабочего стола).
   programs.niri.settings = {

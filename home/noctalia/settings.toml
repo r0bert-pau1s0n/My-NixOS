@@ -1,0 +1,99 @@
+config_version = 15
+
+[bar.default]
+background_opacity = 1.0
+capsule = true
+capsule_thickness = 0.89999998360872269
+center = [ "clock" ]
+end = [
+    "cpu",
+    "temp",
+    "ram",
+    "volume",
+    "bluetooth",
+    "notifications",
+    "clipboard",
+    "keyboard_layout",
+    "battery",
+    "taskbar",
+    "control-center"
+]
+font_family = "JetBrainsMono Nerd Font Mono"
+margin_edge = 4
+margin_ends = 4
+position = "top"
+radius = 12
+start = [ "workspaces", "active_window", "audio_visualizer" ]
+thickness = 25
+widget_spacing = 2
+
+[control_center]
+width = 630
+
+[location]
+address = "Perm"
+auto_locate = false
+
+[notification]
+background_opacity = 0.99999997764825821
+
+[shell]
+corner_radius_scale = 2.0
+font_family = "JetBrainsMono Nerd Font Mono"
+lang = "ru"
+
+    [shell.animation]
+    enabled = false
+
+    [shell.launcher]
+    compact = true
+    default_view = "all"
+    search_position = "top"
+    width = 560
+
+    [shell.panel]
+    clipboard_placement = "attached"
+    floating_layer = "top"
+    launcher_placement = "attached"
+    launcher_position = "auto"
+    polkit_placement = "attached"
+
+    [shell.screen_corners]
+    enabled = true
+
+[theme]
+builtin = "Ayu"
+community_palette = "Alpenglow"
+mode = "dark"
+shell_mode = "follow"
+source = "community"
+sync_color_scheme = true
+wallpaper_scheme = "m3-tonal-spot"
+
+[wallpaper.default]
+path = "~/.config/wallpapers/pixel-porsche-drift-dream-backiee-4K.jpg"
+
+[wallpaper.last]
+path = "~/.config/wallpapers/pixel-porsche-drift-dream-backiee-4K.jpg"
+
+[widget.active_window]
+max_length = 140
+title_scroll = "always"
+
+[widget.audio_visualizer]
+width = 155
+
+[widget.clock]
+format = "{:%H:%M %a %d %b}"
+
+[widget.control-center]
+glyph = "topology-star-3"
+
+[widget.keyboard_layout]
+show_glyph = false
+
+[widget.taskbar]
+only_active_workspace = true
+
+[widget.workspaces]
+active_pill_size = 1.0

@@ -7,3 +7,6 @@
 
 # Образы/артефакты
 *.qcow2
+
+# Noctalia атомарно пишет settings.toml через временный файл
+/home/noctalia/settings.toml.tmp
