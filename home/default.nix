@@ -7,6 +7,7 @@
     ./programs/niri/niri.nix
     ./programs/kitty/kitty.nix
     ./programs/noctalia/noctalia.nix
+    ./programs/qbittorrent/qbittorrent.nix
     ./programs/zsh/zsh.nix
     ./programs/librewolf/librewolf.nix
     ./programs/v2rayn/v2rayn.nix

@@ -127,6 +127,42 @@ connector'ом или уберите строку `xdg.configFile."noctalia/host
   обратно при следующем изменении. После перезапуска host-файл работает как
   ожидается.
 
+### qBittorrent
+
+Noctalia генерирует `~/.config/qBittorrent/themes/noctalia/config.json` из
+активной палитры (шаблон
+`home/programs/qbittorrent/qbittorrent-noctalia.json`). Обёртка
+`home/programs/qbittorrent/qbittorrent.nix` перед запуском qBittorrent
+включает кастомную тему в `~/.config/qBittorrent/qBittorrent.conf`; если
+qBittorrent уже запущен, конфиг не трогается. Первое изменение создаёт
+резервную копию
+`qBittorrent.conf.bak-noctalia`.
+
+qBittorrent 5.2.4 читает UI-тему только при старте, поэтому после смены
+палитры новая тема применится при следующем запуске qBittorrent. Автоматического
+перезапуска нет — активные загрузки не прерываются. Интеграция затрагивает
+только qBittorrent.
+
+Штатный API тем qBittorrent задаёт цвета только для групп `Active` и
+`Disabled`. Патч `qbittorrent-inactive-palette.patch` повторяет нормальные
+цвета в группе `Inactive`, иначе неактивное окно использует системную
+палитру и теряет контрастность.
+
+Диалог добавления торрента открывается как transient-окно main-окна.
+Niri позиционирует такие окна относительно родителя в scrolling layout,
+поэтому при main в конце рабочего пространства диалог мог уезжать за край.
+Патч `qbittorrent-add-dialog-transient-parent.patch` выставляет transient
+parent, а helper `qbittorrent-niri-focus-main` перед показом фокусирует и
+центрирует main, чтобы Niri прокрутил его в видимую область. Это не меняет
+layout и не
+добавляет общее правило `open-floating` для qBittorrent, которое затронуло бы
+и main-окно. Helper ограничивает IPC-вызовы таймаутами, а qBittorrent ждёт
+его не более 3 с, поэтому зависший Niri не блокирует запуск навсегда. Если
+qBittorrent запускается с torrent-файлом с нуля, dialog показывается после
+того, как Niri отобразит и центрирует main, поэтому он не остаётся смещённым
+или в размере по умолчанию. Если main был скрыт в трей, открытие torrent
+сначала восстанавливает main, а затем показывает dialog.
+
 ## Проверки качества
 
 ```bash

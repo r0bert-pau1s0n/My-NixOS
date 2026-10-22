@@ -217,6 +217,10 @@
         action.spawn = "portproton";
         hotkey-overlay.title = "PortProton";
       };
+      "Mod+Shift+B" = {
+        action.spawn = "qbittorrent";
+        hotkey-overlay.title = "qBittorrent";
+      };
 
       # Утилиты Noctalia v5 (IPC: `noctalia msg <команда>`)
       "Mod+Y" = {

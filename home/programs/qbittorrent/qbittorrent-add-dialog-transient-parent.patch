@@ -1,0 +1,95 @@
+--- a/src/gui/guiaddtorrentmanager.cpp
++++ b/src/gui/guiaddtorrentmanager.cpp
+@@ -29,7 +29,10 @@
+ 
+ #include "guiaddtorrentmanager.h"
+ 
++#include <QProcess>
+ #include <QScreen>
++#include <QTimer>
++#include <QWindow>
+ 
+ #include "base/bittorrent/session.h"
+ #include "base/bittorrent/torrentdescriptor.h"
+@@ -262,8 +265,71 @@
+     auto *dlg = new AddNewTorrentDialog(torrentDescr, params, (attached ? app()->mainWindow() : nullptr));
+     // Qt::Window is required to avoid showing only two dialog on top (see #12852).
+     // Also improves the general convenience of adding multiple torrents.
++    bool deferShow = false;
++    const auto focusMainWindow = [](QWidget *mainWindow)
++    {
++        const QString focusCommand = qEnvironmentVariable("QBITTORRENT_NIRI_FOCUS_MAIN");
++        if (focusCommand.isEmpty())
++            return;
++
++        QProcess focusProcess;
++        focusProcess.start(focusCommand, QStringList());
++        if (focusProcess.waitForStarted(500) && !focusProcess.waitForFinished(3000))
++        {
++            focusProcess.kill();
++            focusProcess.waitForFinished(100);
++        }
++    };
++
+     if (!attached)
++    {
+         dlg->setWindowFlags(Qt::Window);
++    }
++    else if (MainWindow *mainWindow = app()->mainWindow())
++    {
++        // Opening a torrent while qBittorrent is hidden in the tray should
++        // restore the main window instead of leaving the dialog without a
++        // visible parent.
++        if (mainWindow->isHidden() || mainWindow->isMinimized())
++        {
++            mainWindow->setWindowState(mainWindow->windowState() & ~Qt::WindowMinimized);
++            mainWindow->activate();
++        }
++
++        mainWindow->winId();
++        dlg->winId();
++        if (QWindow *mainWindowHandle = mainWindow->windowHandle())
++        {
++            if (QWindow *dialogWindow = dlg->windowHandle())
++                dialogWindow->setTransientParent(mainWindowHandle);
++
++            // The main window may still be waiting for its initial Niri
++            // configure event when qBittorrent starts with a torrent file.
++            // Keep the dialog sized to the main window once the final size
++            // is known, instead of freezing the pre-configure geometry.
++            QObject::connect(mainWindowHandle, &QWindow::widthChanged, dlg, [dlg, mainWindow](int)
++            {
++                dlg->resize(mainWindow->size());
++            });
++            QObject::connect(mainWindowHandle, &QWindow::heightChanged, dlg, [dlg, mainWindow](int)
++            {
++                dlg->resize(mainWindow->size());
++            });
++        }
++        dlg->resize(mainWindow->size());
++
++        // On a cold start the main window has only been requested, not mapped
++        // yet. Show the dialog after Niri has mapped and centered the parent,
++        // otherwise Niri centers the dialog over the parent's pre-scroll
++        // position and leaves it shifted after the viewport settles.
++        deferShow = true;
++        QTimer::singleShot(250, dlg, [dlg, mainWindow, focusMainWindow]()
++        {
++            focusMainWindow(mainWindow);
++            dlg->resize(mainWindow->size());
++            dlg->show();
++        });
++    }
+ 
+     dlg->setAttribute(Qt::WA_DeleteOnClose);
+     m_dialogs[infoHash] = dlg;
+@@ -288,7 +354,8 @@
+     });
+ 
+     adjustDialogGeometry(dlg, app()->mainWindow());
+-    dlg->show();
++    if (!deferShow)
++        dlg->show();
+ 
+     return true;
+ }

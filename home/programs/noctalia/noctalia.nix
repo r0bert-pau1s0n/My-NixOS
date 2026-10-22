@@ -24,6 +24,15 @@ let
       ${pkgs.gnugrep}/bin/grep -qF "$line" "$css" 2>/dev/null || printf '%s\n' "$line" >> "$css"
     '';
   };
+
+  # qBittorrent читает кастомную UI-тему только при старте. Noctalia
+  # перегенерирует config.json при каждой смене палитры, а обёртка
+  # (home/programs/qbittorrent/qbittorrent.nix) включает её в qBittorrent.conf.
+  qbittorrentTemplate = {
+    input_path = ../qbittorrent/qbittorrent-noctalia.json;
+    output_path = "${config.xdg.configHome}/qBittorrent/themes/noctalia/config.json";
+    hook_async = false;
+  };
 in
 {
   # Официальный Home Manager-модуль Noctalia v5.
@@ -69,6 +78,7 @@ in
 
         # Классические GTK3-приложения — см. gtk3ClassicTemplate выше.
         user."gtk3-classic" = gtk3ClassicTemplate;
+        user."qbittorrent" = qbittorrentTemplate;
       };
 
       # ── Хуки ──────────────────────────────────────────────────────────

@@ -25,7 +25,7 @@
 
     # Браузер
     #librewolf (установка через home-manager)
-    qbittorrent
+    # qbittorrent ставится через home/programs/qbittorrent/qbittorrent.nix (обёртка темы)
 
     # V2rayN и ядра
     v2rayn

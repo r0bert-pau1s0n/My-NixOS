@@ -1,0 +1,17 @@
+--- a/src/gui/uithememanager.cpp
++++ b/src/gui/uithememanager.cpp
+@@ -281,7 +281,14 @@ void UIThemeManager::applyPalette() const
+         // For backward compatibility, the palette color overrides are read from the section of the "light mode" colors
+         const QColor newColor = m_themeSource->getColor(colorDescriptor.id, ColorMode::Light);
+         if (newColor.isValid())
++        {
+             palette.setColor(colorDescriptor.colorGroup, colorDescriptor.colorRole, newColor);
++
++            // Custom themes only define the Active and Disabled groups. Mirror
++            // the normal colors into Inactive so unfocused windows stay themed.
++            if (colorDescriptor.colorGroup == QPalette::Normal)
++                palette.setColor(QPalette::Inactive, colorDescriptor.colorRole, newColor);
++        }
+     }
+ 
+     qApp->setPalette(palette);
