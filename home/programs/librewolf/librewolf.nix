@@ -278,9 +278,15 @@ in
         "browser.newtabpage.activity-stream.showSearch" = false;
         "browser.urlbar.shortcuts.actions" = true;
 
-        # Прокси (Throne) и DNS
+        # Прокси (Throne) и DNS. Явный SOCKS5 fail-closed: если Throne не
+        # запущен, браузер не пойдёт напрямую. Локальная сеть — мимо прокси.
+        "network.proxy.type" = 1;
         "network.proxy.socks" = "127.0.0.1";
         "network.proxy.socks_port" = 2080;
+        "network.proxy.socks_version" = 5;
+        "network.proxy.socks_remote_dns" = true;
+        "network.proxy.no_proxies_on" =
+          "localhost, 127.0.0.1, ::1, 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16";
         "network.trr.mode" = 3;
         "network.trr.uri" = "https://dns.quad9.net/dns-query";
 

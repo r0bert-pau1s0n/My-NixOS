@@ -99,21 +99,24 @@ lang = "ru"
 
 [theme]
 builtin = "Ayu"
-community_palette = "Alpenglow"
+community_palette = "Solarized"
 mode = "dark"
 shell_mode = "follow"
-source = "community"
+source = "wallpaper"
 sync_color_scheme = true
-wallpaper_scheme = "m3-tonal-spot"
+wallpaper_scheme = "m3-fruit-salad"
 
     [theme.templates]
-    community_ids = [ "opencode", "pywalfox", "discord", "telegram", "neovim", "vscode", "steam", "yazi" ]
+    community_ids = [ "opencode", "pywalfox", "discord", "telegram", "neovim", "vscode", "steam", "tmux", "yazi" ]
 
 [wallpaper.default]
-path = "~/.config/wallpapers/pixel-porsche-drift-dream-backiee-4K.jpg"
+path = "/home/robert/.config/wallpapers/wet-road-between-tall-trees-backiee-8K.jpg"
 
 [wallpaper.last]
-path = "~/.config/wallpapers/pixel-porsche-drift-dream-backiee-4K.jpg"
+path = "/home/robert/.config/wallpapers/wet-road-between-tall-trees-backiee-8K.jpg"
+
+[wallpaper.monitors.DP-3]
+path = "/home/robert/.config/wallpapers/wet-road-between-tall-trees-backiee-8K.jpg"
 
 [widget.active_window]
 max_length = 165

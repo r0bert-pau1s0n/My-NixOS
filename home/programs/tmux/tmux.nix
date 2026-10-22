@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  xdg.configFile."tmux/tmux.conf".force = true;
+
   programs.tmux = {
     enable = true;
     shortcut = "a"; # Использовать Ctrl+a вместо Ctrl+b (удобнее нажимать)
@@ -37,12 +39,16 @@
 
       # Визуальное оформление панели статуса (нижняя полоса)
       set -g status-position bottom
+      set -gq @noctalia_primary "#7e9cd8"
+      set -gq @noctalia_on_surface_variant "#d8e5e9"
       set -g status-style "bg=default, fg=#7e9cd8"
-      set -g status-left "#[fg=#e6c384,bold] #S "
-      set -g status-right "#[fg=#dca561]%H:%M "
+      set -g status-left "#[fg=#{@noctalia_primary},bold] #S "
+      set -g status-right "#[fg=#{@noctalia_on_surface_variant}]%H:%M "
       set -g window-status-current-style "fg=#1f1f28, bg=#7e9cd8, bold"
       set -g window-status-current-format " #I:#W "
       set -g window-status-format " #I:#W "
+
+      source-file -q "$HOME/.config/tmux/themes/noctalia.conf"
     '';
   };
 }

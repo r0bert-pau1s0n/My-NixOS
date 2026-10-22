@@ -34,6 +34,12 @@ let
     hook_async = false;
   };
 
+  kittyTemplate = {
+    input_path = "${config.programs.noctalia.package}/share/noctalia/assets/templates/kitty/kitty.conf";
+    output_path = "${config.xdg.configHome}/kitty/themes/noctalia.conf";
+    hook_async = false;
+  };
+
   # Встроенный шаблон Noctalia "qt" создаёт
   # ~/.config/qt6ct/colors/noctalia.conf. qt6ct.conf статический: он лишь
   # указывает на этот файл, включает custom_palette и Fusion. Цвета сюда не
@@ -76,7 +82,6 @@ in
         builtin_ids = [
           "btop"
           "gtk3"
-          "kitty"
           "niri"
           "qt"
         ];
@@ -86,13 +91,16 @@ in
           "discord"
           "telegram"
           "neovim"
+          "vscode"
           "steam"
+          "tmux"
           "yazi"
         ];
 
         # Классические GTK3-приложения — см. gtk3ClassicTemplate выше.
         user."gtk3-classic" = gtk3ClassicTemplate;
         user."qbittorrent" = qbittorrentTemplate;
+        user."kitty" = kittyTemplate;
       };
 
       # ── Хуки ──────────────────────────────────────────────────────────
@@ -100,13 +108,13 @@ in
       # приложений без их перезапуска. Хуки выполняются после того, как все
       # шаблоны записаны на диск.
       #
-      # kitty: перегенерируется themes/noctalia.conf (include в kitty.conf), но
-      # штатный templates/kitty/apply.sh падает на read-only store-симлинке
-      # kitty.conf и не доходит до pkill -USR1. Поэтому шлём kitty сигнал
-      # перезагрузки конфига сами: открытые окна перекрашиваются без
-      # перезапуска (kitty.apply_new_options). NixOS-обёртка kitty называется
-      # `.kitty-wrapped`, поэтому пробуем оба имени процесса; `|| true` — если
-      # kitty не запущен.
+      # kitty: перегенерируется themes/noctalia.conf (include в kitty.conf).
+      # Builtin-шаблон kitty отключён, потому что его apply.sh пишет в read-only
+      # store-симлинк kitty.conf. User-шаблон не имеет post_hook, поэтому шлём
+      # kitty сигнал перезагрузки конфига сами: открытые окна перекрашиваются
+      # без перезапуска (kitty.apply_new_options). NixOS-обёртка kitty
+      # называется `.kitty-wrapped`, поэтому пробуем оба имени процесса;
+      # `|| true` — если kitty не запущен.
       #
       # yazi: шаблон сначала перезаписывает flavors/noctalia.yazi/flavor.toml,
       # после чего рассылаем action `app:theme` через DDS (receiver 0 =
@@ -176,6 +184,24 @@ in
       NOCTALIA_STATE_HOME="${config.xdg.stateHome}" \
         ${lib.getExe config.programs.noctalia.package} config validate
     fi
+  '';
+
+  home.activation.noctaliaWritableTemplateTargets = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    make_writable() {
+      target="$1"
+
+      if [ -L "$target" ]; then
+        source="$(readlink -f -- "$target")" || return 1
+        $DRY_RUN_CMD rm -f -- "$target" || return 1
+        $DRY_RUN_CMD install -m 0644 -- "$source" "$target" || return 1
+      elif [ -e "$target" ]; then
+        $DRY_RUN_CMD chmod u+w -- "$target" || return 1
+      fi
+    }
+
+    for relative in "tmux/tmux.conf" "yazi/theme.toml"; do
+      make_writable "${config.xdg.configHome}/$relative"
+    done
   '';
 
   # Старое имя host-слоя: убираем 90-host.toml в backup, чтобы в config-каталоге

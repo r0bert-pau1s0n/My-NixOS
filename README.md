@@ -114,8 +114,10 @@ connector'ом или уберите строку `xdg.configFile."noctalia/host
 
 - `settings.toml` не попадает в Nix store, поэтому его содержимое проверяется
   при activation (`noctalia config validate`), а не при сборке.
-- Community-палитра `Alpenglow` и community-шаблоны скачиваются при первом
-  запуске. Без интернета Noctalia временно использует встроенную палитру.
+- Community-шаблоны скачиваются при первом запуске и кэшируются в
+  `~/.local/state/noctalia/community-templates`. Без сети они не применятся до
+  следующего запуска с сетью. Активная палитра сейчас строится из локальных
+  обоев (`source = "wallpaper"`), поэтому для цветов сеть не нужна.
 - Пути обоев записаны через `~` и раскрываются Noctalia при чтении. Если
   выбрать обои через GUI, Noctalia может снова записать абсолютный путь.
 - Правки per-monitor ключей через GUI попадут в общий `settings.toml`. Чтобы
@@ -126,6 +128,28 @@ connector'ом или уберите строку `xdg.configFile."noctalia/host
   overrides (например, раскладку lockscreen) в памяти и может записать их
   обратно при следующем изменении. После перезапуска host-файл работает как
   ожидается.
+
+### Writable-файлы шаблонов
+
+Для tmux строка `source-file` объявлена прямо в
+`home/programs/tmux/tmux.nix`, поэтому тема подключается после базовых стилей
+и не теряется при switch. Community-hook перечитывает тему в уже запущенных
+сессиях; `status-left`/`status-right` используют переменные Noctalia.
+
+Community-hook для yazi изменяет `yazi/theme.toml` при выборе flavor. Home
+Manager создаёт этот файл read-only симлинком, поэтому activation после
+`linkGeneration` заменяет его на writable-копию. `force = true` в модулях tmux
+и yazi заставляет каждый следующий switch снова взять версию из Nix; для tmux
+это страховка на случай, если hook перепишет файл из-за другого
+`XDG_CONFIG_HOME`.
+
+Source of truth остаётся в `home/programs/tmux/tmux.nix` и
+`home/programs/yazi/yazi.nix`. Ручные правки этих двух файлов в рантайме будут
+потеряны при следующем switch.
+
+Kitty использует тот же шаблон Noctalia как user-шаблон без post-hook:
+`include` и перезагрузка уже управляются Home Manager и
+`hooks.colors_changed`, поэтому трогать read-only `kitty.conf` не нужно.
 
 ### qBittorrent
 
@@ -174,7 +198,14 @@ Noctalia генерирует `~/.config/qt6ct/colors/noctalia.conf` встро�
 `QT_PLUGIN_PATH` и перед запуском записывает `theme=System`,
 `remember_enable=true` и `tun_mode_enabled=true` в
 `~/.config/Throne/config/throne.db`. Без `System` Throne использует
-собственную встроенную тему и игнорирует палитру qt6ct.
+собственную встроенную тему и игнорирует палитру qt6ct. Проверка занятости
+учитывает только GUI Throne текущего пользователя: чужой процесс не мешает
+записи.
+
+При самом первом запуске, когда `throne.db` ещё не существует, prefs не
+применяются: Throne создаёт базу только при старте. Схему базы вручную не
+создаём, поэтому настройки вступят в силу со второго запуска. Это ожидаемое
+поведение, а не ошибка применения темы.
 
 Niri запускает Throne при входе в сессию (`hosts/nixos/home.nix`). Throne
 сам обновляет `remember_id` при каждом запуске профиля, поэтому после
@@ -184,6 +215,12 @@ Niri запускает Throne при входе в сессию (`hosts/nixos/h
 возвращаются при каждом следующем запуске; ручное выключение TUN действует
 до перезапуска Throne.
 
+Перед запуском обёртка ждёт до 15 секунд появления
+`~/.config/qt6ct/colors/noctalia.conf`. Это закрывает гонку с Noctalia на
+первом входе: без ожидания Throne мог стартовать раньше генерации палитры и
+остаться с дефолтной темой. Если файл так и не появился, обёртка пишет
+предупреждение и запускает Throne с существующей темой.
+
 Если Throne уже запущен, база не трогается: GUI мог бы записать свои
 значения обратно при выходе. Поэтому после смены палитры Noctalia новая
 тема применится при следующем запуске Throne. Автоматического перезапуска
@@ -192,24 +229,34 @@ Niri запускает Throne при входе в сессию (`hosts/nixos/h
 Интеграция затрагивает только Throne: глобальные Qt-переменные не
 выставляются, хуки и шаблоны других приложений не меняются.
 
+LibreWolf явно использует SOCKS5 Throne на `127.0.0.1:2080`
+(`network.proxy.type=1`). Это fail-closed: если Throne не запущен, браузер
+не пойдёт напрямую. Локальные сети исключены через `no_proxies_on`.
+
 qt6ct читает палитру при старте. Встроенный шаблон Noctalia задаёт
 одинаковые `disabled`/`inactive` цвета и фиксированные bevel-оттенки — это
 ограничение официального шаблона. Файл для qt5ct тоже создаётся, но ни одно
 Qt5-приложение в этой конфигурации его не использует.
 
-Проверка: `qtdiag6` с `QT_QPA_PLATFORMTHEME=qt6ct` и путём к плагину
-qt6ct должен показать `QPalette::Window`, `WindowText`, `Highlight` и
-`Accent` из `colors/noctalia.conf`; при запуске Throne с
+Проверка: `qtdiag6` из `qttools` с `QT_QPA_PLATFORMTHEME=qt6ct` и путём к
+плагину qt6ct должен показать `QPalette::Window`, `WindowText`, `Highlight`
+и `Accent` из `colors/noctalia.conf`; при запуске Throne с
 `QT_DEBUG_PLUGINS=1` в логе должен загрузиться qt6ct. Если тема не
 применилась, проверьте, что Throne был полностью закрыт, `theme` в базе
 равен `System`, а `colors/noctalia.conf` существует.
 
-Откат: убрать `modules/throne.nix` и его импорт, вернуть блок
-`programs.throne` в `modules/packages.nix`, убрать
-`xdg.configFile."qt6ct/qt6ct.conf"` из `noctalia.nix` и выполнить
-`sudo nixos-rebuild switch --flake ~/nix#nixos`. Если Throne больше не
-нужен, также убрать его из `spawn-at-startup` в `hosts/nixos/home.nix` и
-биндинг `Mod+X` в `home/programs/niri/niri.nix`.
+Откат темы (оставить Throne, но без qt6ct): убрать
+`xdg.configFile."qt6ct/qt6ct.conf"` из `noctalia.nix`, затем в
+`modules/throne.nix` убрать `startupPrefs` и `throneNoctalia`, оставив
+`programs.throne.package = pkgs.throne`. После этого выполнить
+`sudo nixos-rebuild switch --flake ~/nix#nixos`.
+
+Полное удаление Throne: убрать `modules/throne.nix`, его импорт в
+`hosts/nixos/default.nix`, `xdg.configFile."qt6ct/qt6ct.conf"` из
+`noctalia.nix`, автозапуск из `hosts/nixos/home.nix` и биндинг `Mod+X` из
+`home/programs/niri/niri.nix`, затем пересобрать систему. Блока
+`programs.throne` в `modules/packages.nix` раньше не было — возвращать туда
+ничего не нужно.
 
 ## Niri: закрытие приложений и трей
 
@@ -322,9 +369,11 @@ Home Manager откатывается вместе с системой (он с�
      ставится «с нуля».
 
 7. Секреты и внешние ресурсы на новой машине придётся подготовить заново:
-   репозиторий их не содержит. Ключи лежат вне репо (`~/.ssh/*`), приложения
-   с рантайм-клонированием (например, LazyVim) скачивают плагины из интернета
-   при первом запуске. Доступ к кэшу Noctalia (`noctalia.cachix.org`) должен
+   репозиторий их не содержит. Ключи лежат вне репо (`~/.ssh/*`), профиль и
+   учётные данные Throne импортируются вручную, приложения с
+   рантайм-клонированием (например, LazyVim) скачивают плагины из интернета
+   при первом запуске. Community-шаблоны Noctalia также требуют сети при
+   первом запуске. Доступ к кэшу Noctalia (`noctalia.cachix.org`) должен
    работать, иначе `noctalia` соберётся из исходников (долго, но корректно).
 
 8. Зарегистрировать хост в `flake.nix`:

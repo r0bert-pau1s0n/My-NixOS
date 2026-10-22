@@ -26,10 +26,10 @@ let
         exit 0
       fi
 
-      # Exclude this wrapper's parent PID, but detect a real running instance.
-      # The wrapper changes argv[0] to qbittorrent, so match the full command
-      # line rather than the executable name.
-      if pgrep -f '(^|/)qbittorrent( |$)' | grep -vqx "$PPID"; then
+      # Exclude this wrapper's parent PID, but detect a real running instance
+      # of the current user only. The wrapper changes argv[0] to qbittorrent,
+      # so match the full command line rather than the executable name.
+      if pgrep -u "$(id -u)" -f '(^|/)qbittorrent( |$)' | grep -vqx "$PPID"; then
         exit 0
       fi
 
@@ -138,7 +138,7 @@ let
         --set-default QBITTORRENT_NIRI_FOCUS_MAIN ${lib.getExe focusMain} \
         --run '${lib.getExe prefsSync} || true'
     '';
-    meta = qbittorrentPatched.meta;
+    inherit (qbittorrentPatched) meta;
   };
 in
 {

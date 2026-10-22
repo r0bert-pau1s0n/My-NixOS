@@ -186,11 +186,14 @@
     '';
 
     # === theme.toml ===
-    "yazi/theme.toml".text = ''
-      [flavor]
-      dark  = "noctalia"
-      light = "noctalia"
-    '';
+    "yazi/theme.toml" = {
+      force = true;
+      text = ''
+        [flavor]
+        dark  = "noctalia"
+        light = "noctalia"
+      '';
+    };
   };
 
   # Если Noctalia ещё не сгенерировала flavor noctalia, кладём нейтральный
