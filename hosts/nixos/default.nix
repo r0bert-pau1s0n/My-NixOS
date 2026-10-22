@@ -16,6 +16,7 @@
     ../../modules/ssh.nix
     ../../modules/fonts.nix
     ../../modules/packages.nix
+    ../../modules/throne.nix
     ../../modules/users.nix
 
     # Специфика этой машины

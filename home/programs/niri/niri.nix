@@ -188,8 +188,8 @@
         hotkey-overlay.title = "Neovim";
       };
       "Mod+X" = {
-        action.spawn = "v2rayN";
-        hotkey-overlay.title = "V2RayN";
+        action.spawn = "Throne";
+        hotkey-overlay.title = "Throne";
       };
       "Mod+D" = {
         action.spawn = "code";

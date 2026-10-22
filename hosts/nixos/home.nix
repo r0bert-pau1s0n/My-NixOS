@@ -20,10 +20,10 @@
       }
       { command = [ "xwayland-satellite" ]; }
       { command = [ "noctalia" ]; }
-      # v2rayN и Telegram открываются на `main` — первом (стартовом)
+      # Throne и Telegram открываются на `main` — первом (стартовом)
       # воркспейсе niri: других правил автозапуска нет, поэтому окна
       # остаются на активном при старте воркспейсе.
-      { command = [ "v2rayN" ]; }
+      { command = [ "Throne" ]; }
       { command = [ "Telegram" ]; }
     ];
 

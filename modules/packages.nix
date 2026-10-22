@@ -25,4 +25,6 @@
     slurp
     polkit_gnome # Гуй для ввода пароля sudo
   ];
+
+  # Throne находится в modules/throne.nix: там же обёртка для темы Noctalia.
 }

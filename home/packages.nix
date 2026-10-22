@@ -27,11 +27,6 @@
     #librewolf (установка через home-manager)
     # qbittorrent ставится через home/programs/qbittorrent/qbittorrent.nix (обёртка темы)
 
-    # V2rayN и ядра
-    v2rayn
-    xray
-    sing-box
-
     # Мессенджеры
     telegram-desktop
     vesktop

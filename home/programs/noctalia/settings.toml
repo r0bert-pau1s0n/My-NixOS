@@ -106,6 +106,9 @@ source = "community"
 sync_color_scheme = true
 wallpaper_scheme = "m3-tonal-spot"
 
+    [theme.templates]
+    community_ids = [ "opencode", "pywalfox", "discord", "telegram", "neovim", "vscode", "steam", "yazi" ]
+
 [wallpaper.default]
 path = "~/.config/wallpapers/pixel-porsche-drift-dream-backiee-4K.jpg"
 

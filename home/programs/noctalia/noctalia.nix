@@ -33,6 +33,20 @@ let
     output_path = "${config.xdg.configHome}/qBittorrent/themes/noctalia/config.json";
     hook_async = false;
   };
+
+  # Встроенный шаблон Noctalia "qt" создаёт
+  # ~/.config/qt6ct/colors/noctalia.conf. qt6ct.conf статический: он лишь
+  # указывает на этот файл, включает custom_palette и Fusion. Цвета сюда не
+  # копируются, поэтому после смены палитры Noctalia обновляет только
+  # colors/noctalia.conf. Обёртка Throne (modules/throne.nix) подключает
+  # qt6ct как platform theme.
+  qt6ctConf = (pkgs.formats.ini { }).generate "qt6ct.conf" {
+    Appearance = {
+      color_scheme_path = "${config.xdg.configHome}/qt6ct/colors/noctalia.conf";
+      custom_palette = true;
+      style = "Fusion";
+    };
+  };
 in
 {
   # Официальный Home Manager-модуль Noctalia v5.
@@ -123,6 +137,10 @@ in
       };
     };
   };
+
+  # qt6ct читает этот файл при старте. Палитра живёт отдельно, в
+  # colors/noctalia.conf, и перегенерируется Noctalia без перезапуска qt6ct.
+  xdg.configFile."qt6ct/qt6ct.conf".source = qt6ctConf;
 
   # GUI-настройки Noctalia пишутся в ~/.local/state/noctalia/settings.toml.
   # Держим этот файл прямым симлинком на файл в Git-репозитории: Noctalia

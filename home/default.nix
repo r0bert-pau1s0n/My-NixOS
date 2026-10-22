@@ -11,7 +11,6 @@
     ./programs/qbittorrent/qbittorrent.nix
     ./programs/zsh/zsh.nix
     ./programs/librewolf/librewolf.nix
-    ./programs/v2rayn/v2rayn.nix
     ./programs/portals/portals.nix
     ./programs/nvim/nvim.nix
     ./programs/yazi/yazi.nix

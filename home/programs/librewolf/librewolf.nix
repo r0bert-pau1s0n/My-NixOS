@@ -278,9 +278,9 @@ in
         "browser.newtabpage.activity-stream.showSearch" = false;
         "browser.urlbar.shortcuts.actions" = true;
 
-        # Прокси (v2rayN) и DNS
+        # Прокси (Throne) и DNS
         "network.proxy.socks" = "127.0.0.1";
-        "network.proxy.socks_port" = 10808;
+        "network.proxy.socks_port" = 2080;
         "network.trr.mode" = 3;
         "network.trr.uri" = "https://dns.quad9.net/dns-query";
 
