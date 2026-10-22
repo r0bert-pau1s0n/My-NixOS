@@ -646,6 +646,59 @@
           fixed = 920;
         };
       }
+      # Стартовая раскладка: Throne | Telegram (Mod+F) | qBittorrent.
+      # Ширины и maximized задаём здесь, а niri-startup-layout
+      # (см. hosts/nixos/home.nix) запускает qBittorrent последним.
+      {
+        matches = [
+          {
+            app-id = "^Throne$";
+            at-startup = true;
+          }
+        ];
+        open-on-workspace = "main";
+        open-focused = false;
+        default-column-width = {
+          proportion = 0.5;
+        };
+      }
+      {
+        matches = [
+          {
+            app-id = "^org\\.telegram\\.desktop$";
+            at-startup = true;
+          }
+        ];
+        excludes = [ { title = "^Media viewer$"; } ];
+        open-on-workspace = "main";
+        open-focused = true;
+        open-maximized = true;
+      }
+      {
+        matches = [
+          {
+            app-id = "^org\\.qbittorrent\\.qBittorrent$";
+            at-startup = true;
+          }
+        ];
+        open-on-workspace = "main";
+        open-focused = false;
+        default-column-width = {
+          proportion = 0.5;
+        };
+      }
+      # Основное окно qBittorrent всегда открывается без фокуса, чтобы не
+      # перебивать Telegram. Диалоги qBittorrent (другой заголовок) фокус
+      # получают как обычно.
+      {
+        matches = [
+          {
+            app-id = "^org\\.qbittorrent\\.qBittorrent$";
+            title = "^qBittorrent";
+          }
+        ];
+        open-focused = false;
+      }
     ];
   };
 
