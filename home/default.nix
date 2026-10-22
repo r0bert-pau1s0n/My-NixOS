@@ -4,19 +4,19 @@
   imports = [
     ./packages.nix
 
-    ./programs/niri.nix
-    ./programs/kitty.nix
-    ./programs/noctalia.nix
-    ./programs/zsh.nix
-    ./programs/librewolf.nix
-    ./programs/v2rayn.nix
-    ./programs/portals.nix
+    ./programs/niri/niri.nix
+    ./programs/kitty/kitty.nix
+    ./programs/noctalia/noctalia.nix
+    ./programs/zsh/zsh.nix
+    ./programs/librewolf/librewolf.nix
+    ./programs/v2rayn/v2rayn.nix
+    ./programs/portals/portals.nix
     ./programs/nvim/nvim.nix
-    ./programs/yazi.nix
-    ./programs/opencode.nix
-    ./programs/tmux.nix
-    ./programs/git.nix
-    ./programs/cli-tools.nix
+    ./programs/yazi/yazi.nix
+    ./programs/opencode/opencode.nix
+    ./programs/tmux/tmux.nix
+    ./programs/git/git.nix
+    ./programs/cli-tools/cli-tools.nix
 
     ./wallpapers/wallpapers.nix
 

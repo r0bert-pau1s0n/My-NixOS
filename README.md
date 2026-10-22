@@ -64,7 +64,7 @@ sudo nixos-rebuild boot --flake ~/nix#nixos
 Noctalia собирает настройки из трёх слоёв в порядке загрузки:
 
 - `~/.config/noctalia/config.toml` — декларативный слой Home Manager
-  (`home/programs/noctalia.nix`): шаблоны с store-путями, хуки, каталог обоев и
+  (`home/programs/noctalia/noctalia.nix`): шаблоны с store-путями, хуки, каталог обоев и
   privacy-флаги;
 - `~/.config/noctalia/host.toml` — host-specific мониторы, lockscreen и обои;
 - `~/.local/state/noctalia/settings.toml` — слой, в который Noctalia пишет
@@ -73,14 +73,14 @@ Noctalia собирает настройки из трёх слоёв в пор�
 В этом репозитории `settings.toml` — **отслеживаемый Git-файл**:
 
 ```
-home/noctalia/settings.toml          источник истины
+home/programs/noctalia/settings.toml          источник истины
         ▲
         │ Noctalia пишет атомарно сквозь симлинк
 ~/.local/state/noctalia/settings.toml
 ```
 
 Activation после `linkGeneration` создаёт прямой симлинк из state-каталога на
-`~/nix/home/noctalia/settings.toml`. Повторные переключения идемпотентны:
+`~/nix/home/programs/noctalia/settings.toml`. Повторные переключения идемпотентны:
 правильная ссылка не трогается, старый двухступенчатый симлинк через
 `/nix/store` заменяется прямым, а чужой файл или симлинк уходит в
 `settings.toml.bak-<timestamp>`. Каталог на месте `settings.toml` не
@@ -92,12 +92,12 @@ Activation после `linkGeneration` создаёт прямой симлин�
 ```bash
 git status
 git diff
-git add home/noctalia/settings.toml
+git add home/programs/noctalia/settings.toml
 git commit -m "Update Noctalia settings"
 ```
 
 Repo должен быть клонирован именно в `~/nix`: путь к `settings.toml` зашит в
-`home/programs/noctalia.nix`. При первом переключении существующий
+`home/programs/noctalia/noctalia.nix`. При первом переключении существующий
 `settings.toml` автоматически перемещается в
 `settings.toml.bak-<timestamp>`; если миграция не удалась, activation
 останавливается.

@@ -32,7 +32,7 @@ in
   # Конфигурация разделена:
   #   1. config.toml (этот файл) — структурные значения: templates/hooks с
   #      store-путями, каталог обоев и privacy-флаги.
-  #   2. home/noctalia/settings.toml — GUI-настройки. Activation создаёт
+  #   2. home/programs/noctalia/settings.toml — GUI-настройки. Activation создаёт
   #      прямой симлинк из ~/.local/state/noctalia/settings.toml на этот файл,
   #      Noctalia пишет сквозь него, а изменения сразу видны в git diff.
   #   3. ~/.config/noctalia/host.toml — host-specific мониторы/lockscreen.
@@ -42,7 +42,7 @@ in
     enable = true;
 
     # Оформление, панель, виджеты и прочие GUI-настройки живут в
-    # home/noctalia/settings.toml и пишутся туда самим Noctalia. Здесь
+    # home/programs/noctalia/settings.toml и пишутся туда самим Noctalia. Здесь
     # остаются только структурные значения, которые нельзя хранить в
     # GUI-файле: store-пути шаблонов и хуков, каталог обоев, privacy-флаги.
     settings = {
@@ -121,7 +121,7 @@ in
   # xdg.stateFile/force и не проходить через промежуточный store-симлинк.
   home.activation.noctaliaSettingsLink = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     target="${config.xdg.stateHome}/noctalia/settings.toml"
-    repo="${config.home.homeDirectory}/nix/home/noctalia/settings.toml"
+    repo="${config.home.homeDirectory}/nix/home/programs/noctalia/settings.toml"
 
     [ -f "$repo" ] || { echo "Noctalia settings file is missing: $repo"; exit 1; }
 
