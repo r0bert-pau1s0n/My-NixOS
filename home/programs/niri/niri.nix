@@ -258,7 +258,7 @@
         ];
         hotkey-overlay.title = "Clipboard Wipe: Noctalia";
       };
-      "Mod+Shift+Q" = {
+      "Mod+Shift+W" = {
         action.spawn = [
           "noctalia"
           "msg"
@@ -479,7 +479,12 @@
 
       # Состояния окон
       "Mod+Q" = {
+        action.spawn = "niri-close-app";
+        hotkey-overlay.title = "Force Close Application";
+      };
+      "Mod+Shift+Q" = {
         action.close-window = { };
+        hotkey-overlay.title = "Send Window to Tray (if supported)";
       };
       "Mod+F" = {
         action.maximize-column = { };

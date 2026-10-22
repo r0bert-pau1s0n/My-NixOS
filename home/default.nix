@@ -5,6 +5,7 @@
     ./packages.nix
 
     ./programs/niri/niri.nix
+    ./programs/niri/niri-window-actions.nix
     ./programs/kitty/kitty.nix
     ./programs/noctalia/noctalia.nix
     ./programs/qbittorrent/qbittorrent.nix
