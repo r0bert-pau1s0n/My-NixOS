@@ -4,7 +4,6 @@ config_version = 15
 background_opacity = 1.0
 capsule = true
 capsule_thickness = 0.89999998360872269
-center = [ "clock" ]
 end = [
     "cpu",
     "temp",
@@ -16,6 +15,7 @@ end = [
     "keyboard_layout",
     "battery",
     "taskbar",
+    "tray",
     "control-center"
 ]
 font_family = "JetBrainsMono Nerd Font Mono"
@@ -36,6 +36,7 @@ auto_locate = false
 
 [notification]
 background_opacity = 0.99999997764825821
+offset_y = 3
 
 [shell]
 corner_radius_scale = 2.0
@@ -61,6 +62,41 @@ lang = "ru"
     [shell.screen_corners]
     enabled = true
 
+    [[shell.session.actions]]
+    action = "lock"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "1"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "logout"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "2"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "suspend"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "3"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "reboot"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "4"
+    variant = "default"
+
+    [[shell.session.actions]]
+    action = "shutdown"
+    countdown_seconds = 0.0
+    enabled = true
+    shortcut = "5"
+    variant = "destructive"
+
 [theme]
 builtin = "Ayu"
 community_palette = "Alpenglow"
@@ -77,11 +113,11 @@ path = "~/.config/wallpapers/pixel-porsche-drift-dream-backiee-4K.jpg"
 path = "~/.config/wallpapers/pixel-porsche-drift-dream-backiee-4K.jpg"
 
 [widget.active_window]
-max_length = 140
+max_length = 165
 title_scroll = "always"
 
 [widget.audio_visualizer]
-width = 155
+width = 165
 
 [widget.clock]
 format = "{:%H:%M %a %d %b}"
