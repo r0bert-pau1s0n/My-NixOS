@@ -1,5 +1,10 @@
 { lib, pkgs, ... }:
 let
+  # qt6ct 0.11 применяет собственный шрифт при старте и без секции [Fonts]
+  # сбрасывает шрифт приложения на DejaVu Sans 12. Патч оставляет шрифт
+  # Throne, пока general/fixed явно не заданы в qt6ct.conf.
+  qt6ct = import ./qt6ct-patched.nix { inherit pkgs; };
+
   # Throne хранит настройки в SQLite. «System» заставляет его взять палитру
   # из Qt platform theme (qt6ct). remember_enable + tun_mode_enabled включают
   # автозапуск последнего профиля в TUN-режиме, когда ядро готово.
@@ -74,7 +79,7 @@ let
     postBuild = ''
       wrapProgram $out/bin/Throne \
         --set QT_QPA_PLATFORMTHEME qt6ct \
-        --prefix QT_PLUGIN_PATH : ${pkgs.qt6Packages.qt6ct}/lib/qt-6/plugins \
+        --prefix QT_PLUGIN_PATH : ${qt6ct}/lib/qt-6/plugins \
         --run '${lib.getExe waitForPalette} || true' \
         --run '${lib.getExe startupPrefs} || true'
     '';

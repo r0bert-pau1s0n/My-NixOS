@@ -77,6 +77,9 @@
       };
 
       # `nix flake check` реально собирает систему
-      checks.${system}.nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
+      checks.${system} = {
+        nixos = self.nixosConfigurations.nixos.config.system.build.toplevel;
+        qt6ct-preserve-app-font = import ./checks/qt6ct-preserve-app-font.nix { inherit pkgs; };
+      };
     };
 }

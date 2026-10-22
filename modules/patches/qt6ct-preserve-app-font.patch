@@ -1,0 +1,58 @@
+diff --git a/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp b/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp
+--- a/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp
++++ b/src/qt6ct-qtplugin/qt6ctplatformtheme.cpp
+@@ -66,7 +66,8 @@ Qt6CTPlatformTheme::Qt6CTPlatformTheme()
+ #ifdef QT_WIDGETS_LIB
+         QMetaObject::invokeMethod(this, &Qt6CTPlatformTheme::createFSWatcher, Qt::QueuedConnection);
+ #endif
+-        QGuiApplication::setFont(m_generalFont);
++        if(m_applyGeneralFont)
++            QGuiApplication::setFont(m_generalFont);
+     }
+     qCDebug(lqt6ct) << "using qt6ct plugin";
+ #ifdef QT_WIDGETS_LIB
+@@ -156,12 +157,14 @@ void Qt6CTPlatformTheme::applySettings()
+         return;
+     }
+ 
+-    QGuiApplication::setFont(m_generalFont); //apply font
++    if(m_applyGeneralFont)
++        QGuiApplication::setFont(m_generalFont); //apply font
+ 
+ #ifdef QT_WIDGETS_LIB
+     if(hasWidgets())
+     {
+-        qApp->setFont(m_generalFont);
++        if(m_applyGeneralFont)
++            qApp->setFont(m_generalFont);
+ 
+         //Qt 5.6 or higher should be use themeHint function on application startup.
+         //So, there is no need to call this function first time.
+@@ -263,9 +266,14 @@ void Qt6CTPlatformTheme::readSettings()
+ 
+     settings.beginGroup("Fonts"_L1);
+     m_generalFont = QGuiApplication::font();
+-    m_generalFont.fromString(settings.value("general"_L1, QGuiApplication::font()).toString());
++    const QString generalFont = settings.value("general"_L1).toStringList().join(QLatin1Char(','));
++    m_applyGeneralFont = !generalFont.isEmpty();
++    if(m_applyGeneralFont)
++        m_generalFont.fromString(generalFont);
+     m_fixedFont = QGuiApplication::font();
+-    m_fixedFont.fromString(settings.value("fixed"_L1, QGuiApplication::font()).toString());
++    const QString fixedFont = settings.value("fixed"_L1).toStringList().join(QLatin1Char(','));
++    if(!fixedFont.isEmpty())
++        m_fixedFont.fromString(fixedFont);
+     settings.endGroup();
+ 
+     settings.beginGroup("Interface"_L1);
+diff --git a/src/qt6ct-qtplugin/qt6ctplatformtheme.h b/src/qt6ct-qtplugin/qt6ctplatformtheme.h
+--- a/src/qt6ct-qtplugin/qt6ctplatformtheme.h
++++ b/src/qt6ct-qtplugin/qt6ctplatformtheme.h
+@@ -92,6 +92,7 @@ private:
+     int m_buttonBoxLayout;
+     int m_keyboardScheme;
+     bool m_update = false;
++    bool m_applyGeneralFont = false;
+     int m_toolButtonStyle = Qt::ToolButtonFollowStyle;
+     int m_wheelScrollLines = 3;
+     bool m_showShortcutsInContextMenus = false;
