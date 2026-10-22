@@ -40,5 +40,12 @@
     millennium-steam
     # Запуск Windows-игр вне Steam (overlay в modules/common.nix)
     portproton
+
+    # Утилиты, на которые ссылаются бинды niri и opener'ы yazi
+    swaylock
+    playerctl
+    brightnessctl
+    mpv
+    vscode
   ];
 }

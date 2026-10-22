@@ -655,10 +655,12 @@
   # Включаем include декларативно: в конце конфига (чтобы тема Noctalia
   # переопределяла наши базовые цвета, как делал бы apply.sh) и как optional,
   # чтобы niri стартовал ещё до того, как Noctalia создаст noctalia.kdl.
+  # Путь абсолютный: config.kdl лежит в Nix store, поэтому относительный
+  # include искал бы noctalia.kdl рядом с ним, а не в ~/.config/niri.
   xdg.configFile.niri-config.source = lib.mkForce (
     pkgs.writeText "niri-config.kdl" ''
       ${config.programs.niri.finalConfig}
-      include optional=true "noctalia.kdl"
+      include optional=true "${config.xdg.configHome}/niri/noctalia.kdl"
     ''
   );
 }
