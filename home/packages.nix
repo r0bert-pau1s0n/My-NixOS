@@ -24,7 +24,7 @@
     opencode
 
     # Браузер
-    ungoogled-chromium
+    brave
     #librewolf (установка через home-manager)
     # qbittorrent ставится через home/programs/qbittorrent/qbittorrent.nix (обёртка темы)
 
