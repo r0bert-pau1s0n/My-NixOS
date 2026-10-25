@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, ... }:
 
 let
   allowedDomains = [
@@ -322,7 +322,9 @@ in
         "privacy.socialtracking.block_cookies.enabled" = true;
         "privacy.trackingprotection.cryptomining.enabled" = true;
         "privacy.trackingprotection.fingerprinting.enabled" = true;
-        "privacy.resistFingerprinting" = true;
+        # RFP подменяет KeyboardEvent.code для нелатинских раскладок и ломает
+        # Vimium "Ignore keyboard layout". FPP и ETP Strict остаются включены.
+        "privacy.resistFingerprinting" = false;
         "privacy.fingerprintingProtection" = true;
         "privacy.spoof_english" = 2;
         "privacy.annotate_channels.strict_list.enabled" = true;
@@ -355,4 +357,32 @@ in
       };
     };
   };
+
+  home.activation.librewolfUserJsMigration = lib.hm.dag.entryBefore [ "linkGeneration" ] ''
+    user_js="${config.home.homeDirectory}/.librewolf/default/user.js"
+
+    if [ -L "$user_js" ]; then
+      target="$(readlink -f -- "$user_js" 2>/dev/null || true)"
+      case "$target" in
+        /nix/store/*) ;;
+        *)
+          backup="$user_js.bak-$(date +%Y%m%d-%H%M%S)"
+          if [ -e "$backup" ] || [ -L "$backup" ]; then
+            backup="$backup-$$"
+          fi
+          $DRY_RUN_CMD mv -- "$user_js" "$backup" || exit 1
+          ;;
+      esac
+    elif [ -e "$user_js" ]; then
+      if [ -d "$user_js" ]; then
+        echo "Refusing to replace directory with LibreWolf user.js: $user_js"
+        exit 1
+      fi
+      backup="$user_js.bak-$(date +%Y%m%d-%H%M%S)"
+      if [ -e "$backup" ] || [ -L "$backup" ]; then
+        backup="$backup-$$"
+      fi
+      $DRY_RUN_CMD mv -- "$user_js" "$backup" || exit 1
+    fi
+  '';
 }
