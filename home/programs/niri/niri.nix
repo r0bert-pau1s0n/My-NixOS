@@ -595,7 +595,8 @@
 
     # === ПРАВИЛА ОКОН ===
     window-rules = [
-      # Скругленные углы для всех окон
+      # Скругленные углы и полупрозрачность для всех окон.
+      # 0.9 + размытие фона (см. window-rule ниже) сохраняет читаемость текста.
       {
         geometry-corner-radius =
           let
@@ -608,6 +609,7 @@
             bottom-right = r;
           };
         clip-to-geometry = true;
+        opacity = 0.9;
       }
       # PiP для LibreWolf
       {
@@ -713,6 +715,15 @@
   xdg.configFile.niri-config.source = lib.mkForce (
     pkgs.writeText "niri-config.kdl" ''
       ${config.programs.niri.finalConfig}
+
+      // Размытие фона под полупрозрачными окнами (niri 26.04+).
+      // niri-flake ещё не знает этот ключ, поэтому добавляем KDL напрямую.
+      window-rule {
+          background-effect {
+              blur true
+          }
+      }
+
       include optional=true "${config.xdg.configHome}/niri/noctalia.kdl"
     ''
   );
