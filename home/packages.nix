@@ -4,7 +4,6 @@
   home.packages = with pkgs; [
     # Пользовательские утилиты
     #yazi (установка через home-manager)
-    btop
     fastfetch
     #zsh (установка через home-manager)
 

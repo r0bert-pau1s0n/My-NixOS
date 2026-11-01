@@ -208,15 +208,12 @@ background_opacity = 0.99999997764825821
 offset_y = 3
 
 [plugins]
-enabled = [ "h465855hgg/lyrics" ]
+enabled = []
 
 [shell]
 corner_radius_scale = 2.0
 font_family = "JetBrainsMono Nerd Font Mono"
 lang = "ru"
-
-    [shell.animation]
-    enabled = false
 
     [shell.launcher]
     compact = true
@@ -228,7 +225,11 @@ lang = "ru"
     control_center_placement = "floating"
     control_center_position = "center"
     floating_layer = "top"
-    polkit_placement = "attached"
+    session_placement = "floating"
+    session_position = "center"
+    transparency_mode = "glass"
+    wallpaper_placement = "floating"
+    wallpaper_position = "center"
 
     [shell.screen_corners]
     enabled = true
@@ -288,6 +289,9 @@ path = "/home/robert/.config/wallpapers/cigarette-smoke-universe-backiee-HD.jpg"
 
 [wallpaper.monitors.DP-3]
 path = "/home/robert/.config/wallpapers/cigarette-smoke-universe-backiee-HD.jpg"
+
+[weather]
+refresh_minutes = 5
 
 [widget.active_window]
 max_length = 165

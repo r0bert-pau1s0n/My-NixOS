@@ -4,6 +4,7 @@
   imports = [
     ./packages.nix
 
+    ./programs/btop/btop.nix
     ./programs/niri/niri.nix
     ./programs/niri/niri-window-actions.nix
     ./programs/kitty/kitty.nix
