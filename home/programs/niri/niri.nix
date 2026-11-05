@@ -60,6 +60,9 @@
         tap = true;
         natural-scroll = true;
       };
+      mouse = {
+        accel-speed = -0.7;
+      };
     };
 
     # === ОКРУЖЕНИЕ ===
@@ -610,6 +613,22 @@
           };
         clip-to-geometry = true;
         opacity = 0.9;
+      }
+      # CS2: сразу полноэкранно, без базовой полупрозрачности и скруглений.
+      # В native Wayland (SDL_VIDEO_DRIVER=wayland) игра масштабирует
+      # 1280x960 -> 1920x1080 с линейной фильтрацией; правило убирает
+      # стартовую задержку fullscreen и прозрачность/скругления.
+      {
+        matches = [ { app-id = "^cs2$"; } ];
+        open-fullscreen = true;
+        opacity = 1.0;
+        clip-to-geometry = false;
+        geometry-corner-radius = {
+          top-left = 0.0;
+          top-right = 0.0;
+          bottom-left = 0.0;
+          bottom-right = 0.0;
+        };
       }
       # PiP для LibreWolf
       {
